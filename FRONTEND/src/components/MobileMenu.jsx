@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router'
-import { FiChevronDown, FiUser, FiX } from 'react-icons/fi'
-import Collapsible from '@/components/common/Collapsible'
-import IconButton from '@/components/common/IconButton'
-import Logo from '@/components/common/Logo'
+import { FiChevronDown, FiX } from 'react-icons/fi'
+import Collapsible from '@/components/Collapsible'
+import IconButton from '@/components/IconButton'
+import Logo from '@/components/Logo'
 import { cn } from '@/utils/cn'
 
 const rowClasses =
@@ -68,7 +68,7 @@ const MobileMenuAccordion = ({ item, onNavigate }) => {
   )
 }
 
-const MobileMenu = ({ id, open, onClose, brand, navItems, account }) => {
+const MobileMenu = ({ id, open, onClose, brand, navItems }) => {
   const dialogRef = useRef(null)
 
   useEffect(() => {
@@ -116,17 +116,6 @@ const MobileMenu = ({ id, open, onClose, brand, navItems, account }) => {
             )}
           </ul>
         </nav>
-
-        <div className="shrink-0 border-t border-line bg-surface-muted px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
-          <Link
-            to={account.href}
-            onClick={onClose}
-            className="flex min-h-12 items-center gap-3 font-display tracking-wide uppercase transition-colors hover:text-accent"
-          >
-            <FiUser aria-hidden="true" className="size-5" />
-            {account.label}
-          </Link>
-        </div>
       </div>
     </dialog>
   )

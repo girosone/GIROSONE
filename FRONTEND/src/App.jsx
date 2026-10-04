@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router'
-import MainLayout from '@/components/layout/MainLayout'
+import MainLayout from '@/layouts/MainLayout'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 

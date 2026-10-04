@@ -34,31 +34,29 @@
 
 ---
 
-## Current State (as of 2026-10-03)
+## Current State (as of 2026-10-05)
 
-The project is not starting from zero. An earlier session built:
+M0.1 and M0.2 are complete.
 
 | Area | Status |
 |------|--------|
-| `FRONTEND/` | Vite + React 19, Tailwind CSS v4 (`@theme` in `index.css`), `react-router` v7, `react-icons`, `tailwind-merge`, `@` path alias, ESLint |
-| Header | `AnnouncementBar`, `Navbar`, `MegaMenu`, `MobileMenu` (dialog drawer), `SearchBar`, `Logo`, `IconButton`, `Collapsible`, `useScrolled` hook |
-| Routing | `MainLayout` with Home + 404 |
-| `BACKEND/` | Empty folder |
-| Not installed yet | `axios`, `react-scroll` |
+| `FRONTEND/` | Vite + React 19, Tailwind CSS v4, `react-router` v7, `react-icons`, `tailwind-merge`, `@` path alias, ESLint |
+| Frontend structure | Aligned with PROJECT.md: `components/`, `sections/`, `pages/`, `layouts/`, `services/`, `hooks/`, `utils/`, `data/`, `assets/` |
+| Layout | `MainLayout` moved to `layouts/` |
+| Navigation data | Moved to `data/navigation.js` |
+| Brand assets | Logo moved to `assets/logo/` |
+| Shared components | Header/navigation components moved to the flat `components/` structure |
+| API client | `services/api.js` created with Axios and `VITE_API_URL` |
+| Environment | `FRONTEND/.env.example` created; local `.env` is git-ignored |
+| Packages | `axios` and `react-scroll` installed |
+| Navigation scope | Search, account and cart controls removed; four PROJECT.md categories are used |
+| `BACKEND/` | Skeleton pending M0.3 |
+| Database | Pending M0.3 |
+| M0.2 validation | Lint, build, desktop/mobile browser checks passed |
 
-**Conflicts with the new docs that Phase 0 and Phase 1 must fix:**
+M0.2 cleanup is complete. The existing old teal/Oswald/Jost styling remains temporarily and will be replaced during Phase 1. Navigation routes and final navigation behaviour will be completed during Phase 2.
 
-- Palette is teal `#005B56` / gold `#C68A00`. DESIGN.md requires beige, olive green and golden brown.
-- Fonts are Oswald / Jost. DESIGN.md requires Playfair Display / Poppins.
-- Container max width is 1440px. DESIGN.md requires 720 / 1140 / 1280.
-- Navigation data has 3 categories, with dehydrated powders under Spice Powders. PROJECT.md defines 4 categories.
-- Navbar has search, account and cart icons. PROJECT.md has no cart or customer accounts, and lists Search as a Future feature.
-- Folder layout differs from PROJECT.md: there are `components/layout`, `redux/` and `components/{cart,auth,...}`, and `layouts/`, `sections/` and `data/` are missing.
-- Navigation data lives in `services/`. PROJECT.md says `services/` is for API logic only.
-
-Reusable logic (mega menu, drawer, scroll hook, focus handling) stays. Only the styling and the data shape change.
-
----
+Next milestone: **M0.3 Backend Skeleton**.
 
 ## Architecture Summary
 

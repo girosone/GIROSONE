@@ -50,7 +50,7 @@ Done:
 - Git initialized at project root (branch `main`)
 
 ### M0.2 — Frontend Realignment
-Status: Pending
+Status: Completed (2026-10-05). Not committed yet.
 
 ### M0.3 — Backend Skeleton + MongoDB
 Status: Pending
@@ -88,10 +88,11 @@ Status: Pending
 ## Existing State
 - Frontend exists with Vite + React.
 - Tailwind v4 and React Router are present.
-- Some header/navigation components already exist.
+- Header/navigation components live in `components/` (flat), `MainLayout` in `layouts/`, nav data in `data/navigation.js`.
+- `axios` and `react-scroll` are installed. `services/api.js` is the single Axios instance.
 - Backend is not yet established.
 - MongoDB is not yet configured.
-- Existing frontend code contains design/architecture conflicts that will be handled during M0.2.
+- Folder structure matches PROJECT.md. The old teal/Oswald/Jost theme and 1440px container remain until Phase 1.
 
 ## Session Log
 ### Planning
@@ -118,6 +119,38 @@ Issues / notes:
 - `BACKEND/` is empty, so git does not track it until M0.3 adds files.
 - `FRONTEND/.gitignore` (Vite default) is kept. It overlaps with the root file and does no harm.
 
+### M0.2 — Frontend Realignment (2026-10-05)
+Status: Completed.
+
+Changed:
+- Installed `axios` ^1.20.0 and `react-scroll` ^1.9.3 (react-scroll is not used until Phase 2).
+- `FRONTEND/src` now has exactly: `assets/{images,icons,logo}`, `components/`, `sections/`, `pages/`, `layouts/`, `services/`, `hooks/`, `utils/`, `data/`.
+- `components/layout/MainLayout.jsx` → `layouts/MainLayout.jsx`.
+- `components/layout/*` and `components/common/*` flattened into `components/` (AnnouncementBar, Header, Navbar, MegaMenu, MobileMenu, Collapsible, IconButton, Logo).
+- `services/navigationData.js` → `data/navigation.js`. Categories corrected to PROJECT.md's four (Dehydrated Powders split out of Spice Powders, "Strong Hing" removed per the catalog decision). `utilityNavigation` (search/account/cart) removed.
+- `assets/Images/logo.{png,webp}` → `assets/logo/`.
+- New `services/api.js`: Axios instance, `baseURL` from `VITE_API_URL`, `withCredentials: true` (httpOnly-cookie JWT decision).
+- New `FRONTEND/.env.example` with `VITE_API_URL=http://localhost:5000/api`.
+- Navbar/Header/MobileMenu: search, account and cart controls removed (confirmed decision; all three linked to 404 routes).
+
+Removed:
+- `src/redux/`, `components/{admin,auth,cart,home,products}/`, `public/images/*` (7 subfolders): all empty, `.gitkeep` only.
+- `components/layout/SearchBar.jsx`: search is a Future feature.
+
+Verified:
+- `npm run lint` and `npm run build` pass with no warnings.
+- Dev server in Chrome at 360px and 1280px: home renders, logo loads, no horizontal scroll, no console errors/warnings. Mobile drawer opens/closes and its accordion lists the 4 categories. Mega menu opens, lists the 4 categories, closes on Esc. Unknown route shows the 404 page.
+- `services/api.js` loaded in the browser reports `baseURL` = `VITE_API_URL` and `withCredentials` = true.
+- `FRONTEND/.env` is git-ignored, `.env.example` is not.
+
+Issues / notes:
+- Not committed. The `src/assets` renames are staged (needed so git records the lowercase `images/` folder on Windows).
+- No `FRONTEND/.env` was created. Copy `.env.example` to `.env` before M0.3's health-check call.
+- Announcement text still says "Free Shipping Above ₹799", which makes no sense without a cart. Left for M1.3.
+- Nav has no "Home" item and the mega menu's "Shop all spices" link points to `/shop`, which is not a planned route. Left for M2.2.
+- `IconButton`'s `badge` and `to` props and `assets/logo/logo.png` (1 MB source file) are currently unused. Left in place.
+- PLAN.md's "Current State" section still describes the pre-M0.2 layout.
+
 ## Update Rules
 After each Claude milestone:
 1. Update that milestone's status.
@@ -128,4 +161,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M0.2 — Frontend Realignment.
+M0.3 — Backend Skeleton + MongoDB.

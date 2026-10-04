@@ -1,4 +1,4 @@
-import logo from '@/assets/Images/logo.webp'
+import logo from '@/assets/logo/logo.webp'
 
 export const announcement = {
   messages: ['Premium Indian Spices', 'Free Shipping Above ₹799'],
@@ -28,7 +28,7 @@ export const mainNavigation = [
         },
         {
           id: 'hing',
-          title: 'Hing (Asafoetida)',
+          title: 'Hing',
           href: '/category/hing',
           items: [
             { id: 'regular-hing', label: 'Regular Hing', href: '/product/regular-hing' },
@@ -37,7 +37,6 @@ export const mainNavigation = [
               label: 'Premium Compounded Hing Powder',
               href: '/product/premium-compounded-hing-powder',
             },
-            { id: 'strong-hing', label: 'Strong Hing', href: '/product/strong-hing' },
           ],
         },
         {
@@ -50,6 +49,13 @@ export const mainNavigation = [
               label: 'Premium Amchur Powder (Dry Mango)',
               href: '/product/premium-amchur-powder',
             },
+          ],
+        },
+        {
+          id: 'dehydrated-powders',
+          title: 'Dehydrated Powders',
+          href: '/category/dehydrated-powders',
+          items: [
             {
               id: 'premium-dehydrated-onion-powder',
               label: 'Premium Dehydrated Onion Powder',
@@ -74,13 +80,3 @@ export const mainNavigation = [
   { id: 'wholesale', label: 'Wholesale', href: '/wholesale' },
   { id: 'contact', label: 'Contact', href: '/contact' },
 ]
-
-export const utilityNavigation = {
-  search: {
-    label: 'Search',
-    action: '/shop',
-    placeholder: 'Search for spices, hing, tea…',
-  },
-  account: { label: 'Profile', href: '/account' },
-  cart: { label: 'Cart', href: '/cart' },
-}
