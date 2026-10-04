@@ -53,7 +53,7 @@ Done:
 Status: Completed (2026-10-05). Not committed yet.
 
 ### M0.3 — Backend Skeleton + MongoDB
-Status: Pending
+Status: Completed (2026-10-05). Not committed yet.
 
 ### Phase 1 — Design System / Shared UI
 Status: Pending
@@ -90,8 +90,8 @@ Status: Pending
 - Tailwind v4 and React Router are present.
 - Header/navigation components live in `components/` (flat), `MainLayout` in `layouts/`, nav data in `data/navigation.js`.
 - `axios` and `react-scroll` are installed. `services/api.js` is the single Axios instance.
-- Backend is not yet established.
-- MongoDB is not yet configured.
+- Backend exists: Express 5 + Mongoose 9, ES modules, `GET /api/health`, JSON 404 and error handling.
+- MongoDB connects through `MONGODB_URI` (local `mongodb://127.0.0.1:27017/girosone` in development). No models yet.
 - Folder structure matches PROJECT.md. The old teal/Oswald/Jost theme and 1440px container remain until Phase 1.
 
 ## Session Log
@@ -151,6 +151,36 @@ Issues / notes:
 - `IconButton`'s `badge` and `to` props and `assets/logo/logo.png` (1 MB source file) are currently unused. Left in place.
 - PLAN.md's "Current State" section still describes the pre-M0.2 layout.
 
+### M0.3 — Backend Skeleton + MongoDB (2026-10-05)
+Status: Completed.
+
+Changed:
+- `BACKEND/package.json`: ES modules, Node >= 22, scripts `dev` (`node --watch server.js`) and `start`.
+- Installed `express` ^5.2.1, `mongoose` ^9.10.4, `cors` ^2.8.6. No dotenv, nodemon or asyncHandler.
+- `config/env.js`: loads `BACKEND/.env` with `process.loadEnvFile` when the file exists, requires `MONGODB_URI` and `CLIENT_URL`, validates `PORT`, exits with a clear message otherwise. Exports a frozen `env` object; other files read config from it, not from `process.env`.
+- `config/db.js`: `mongoose.connect` with a 5s server-selection timeout, logs host/database, exits on failure.
+- `server.js`: CORS restricted to `CLIENT_URL` with `credentials: true`, JSON body parser, `/api/health`, 404 + error middleware, connects to MongoDB before listening, port-in-use message, graceful shutdown.
+- `routes/healthRoutes.js`, `controllers/healthController.js`: `GET /api/health` → `{ success: true, data: { status, database, environment, uptime, timestamp } }` (503 if the DB connection has dropped).
+- `middleware/notFound.js`, `middleware/errorHandler.js`, `utils/ApiError.js`: errors return `{ success: false, message, errors? }`. 5xx messages are hidden in production and logged on the server.
+- `BACKEND/.env.example`: `NODE_ENV`, `PORT`, `MONGODB_URI`, `CLIENT_URL`, `JWT_SECRET`, `JWT_EXPIRES_IN`.
+- `models/` and `services/` hold only a `.gitkeep` until their first real file.
+
+Verified (local MongoDB service, Node 22.14):
+- No `.env` / missing variable / invalid `PORT` → named in the message, exit 1.
+- Unreachable `MONGODB_URI` → `MongoDB connection failed: connect ECONNREFUSED …` after ~5s, exit 1. Malformed URI fails immediately.
+- `npm run dev` logs the MongoDB connection and the listening URL, with no deprecation warnings.
+- `GET /api/health` → 200 with the standard format. Unknown route → JSON 404. Malformed JSON body → JSON 400.
+- A temporary async route that throws → JSON 500 without any wrapper (Express 5), generic message under `NODE_ENV=production`. The route was removed afterwards.
+- CORS: `Access-Control-Allow-Origin: http://localhost:5173` + `Allow-Credentials: true`; other origins are not allowed.
+- End-to-end in Chrome: `services/api.js` on the Vite dev server called `/health` (200) and an unknown route (JSON 404).
+- `BACKEND/.env` is git-ignored, `.env.example` is not.
+
+Issues / notes:
+- Not committed.
+- A local `BACKEND/.env` was created as a copy of `.env.example` (git-ignored, placeholder `JWT_SECRET`).
+- `JWT_SECRET` / `JWT_EXPIRES_IN` are in `.env.example` but are not required at boot yet; add them to the required list in M6.1 when they are first used.
+- `helmet`, rate limiting and body-size limits are Phase 10 items and were not added.
+
 ## Update Rules
 After each Claude milestone:
 1. Update that milestone's status.
@@ -161,4 +191,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M0.3 — Backend Skeleton + MongoDB.
+M1.1 — Design tokens & global styles (Phase 1). Commit Phase 0 first.

@@ -36,7 +36,7 @@
 
 ## Current State (as of 2026-10-05)
 
-M0.1 and M0.2 are complete.
+Phase 0 (M0.1–M0.3) is complete.
 
 | Area | Status |
 |------|--------|
@@ -50,13 +50,14 @@ M0.1 and M0.2 are complete.
 | Environment | `FRONTEND/.env.example` created; local `.env` is git-ignored |
 | Packages | `axios` and `react-scroll` installed |
 | Navigation scope | Search, account and cart controls removed; four PROJECT.md categories are used |
-| `BACKEND/` | Skeleton pending M0.3 |
-| Database | Pending M0.3 |
+| `BACKEND/` | Express 5 + Mongoose 9, ES modules, CORS for `CLIENT_URL`, env validation, `GET /api/health`, JSON 404/error handling |
+| Database | MongoDB connection via `MONGODB_URI` (`config/db.js`). No models yet. |
+| M0.3 validation | Health check, 404/500, env and bad-URI failures, and the frontend Axios call all passed |
 | M0.2 validation | Lint, build, desktop/mobile browser checks passed |
 
 M0.2 cleanup is complete. The existing old teal/Oswald/Jost styling remains temporarily and will be replaced during Phase 1. Navigation routes and final navigation behaviour will be completed during Phase 2.
 
-Next milestone: **M0.3 Backend Skeleton**.
+Next milestone: **M1.1 Tokens & global styles**.
 
 ## Architecture Summary
 
