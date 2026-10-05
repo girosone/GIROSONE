@@ -16,7 +16,7 @@ const AnnouncementBar = ({ messages = [] }) => {
   if (!messages.length) return null
 
   return (
-    <div className="flex h-9 items-center overflow-hidden bg-brand font-display text-xs tracking-wider text-white sm:text-sm">
+    <div className="flex h-9 items-center overflow-hidden bg-olive text-xs font-medium tracking-wider text-white sm:text-sm">
       <p className="sr-only md:hidden motion-reduce:hidden">{messages.join('. ')}</p>
 
       <p className="page-container hidden items-center justify-center gap-3 truncate md:flex motion-reduce:flex">

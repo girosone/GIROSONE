@@ -36,7 +36,7 @@
 
 ## Current State (as of 2026-10-05)
 
-Phase 0 (M0.1–M0.3) is complete.
+Phase 0 (M0.1–M0.3) and M1.1 are complete.
 
 | Area | Status |
 |------|--------|
@@ -54,10 +54,11 @@ Phase 0 (M0.1–M0.3) is complete.
 | Database | MongoDB connection via `MONGODB_URI` (`config/db.js`). No models yet. |
 | M0.3 validation | Health check, 404/500, env and bad-URI failures, and the frontend Axios call all passed |
 | M0.2 validation | Lint, build, desktop/mobile browser checks passed |
+| Design tokens | M1.1 done: DESIGN.md tokens in `index.css` (`@theme`), self-hosted Playfair Display + Poppins via Fontsource, 720 / 1140 / 1280 container, golden-brown focus ring, reduced-motion support |
 
-M0.2 cleanup is complete. The existing old teal/Oswald/Jost styling remains temporarily and will be replaced during Phase 1. Navigation routes and final navigation behaviour will be completed during Phase 2.
+The old teal/Oswald/Jost styling has been removed. Navigation routes and final navigation behaviour will be completed during Phase 2.
 
-Next milestone: **M1.1 Tokens & global styles**.
+Next milestone: **M1.2 Core components**.
 
 ## Architecture Summary
 

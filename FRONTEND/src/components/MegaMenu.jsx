@@ -60,8 +60,8 @@ const MegaMenu = ({ item }) => {
         aria-controls={panelId}
         onClick={() => (open ? closeMenu() : openMenu())}
         className={cn(
-          'link-underline flex min-h-11 items-center gap-1 font-display text-base tracking-wide uppercase transition-colors hover:text-accent xl:text-lg',
-          open && 'text-accent',
+          'link-underline flex min-h-11 items-center gap-1 text-sm font-medium tracking-wider uppercase transition-colors hover:text-gold xl:text-base',
+          open && 'text-gold',
         )}
       >
         {item.label}
@@ -74,12 +74,12 @@ const MegaMenu = ({ item }) => {
       <div
         id={panelId}
         className={cn(
-          'absolute top-full -left-6 z-10 pt-3 transition-[opacity,translate,visibility] duration-200 ease-out',
+          'absolute top-full -left-6 z-10 pt-3 transition-[opacity,translate,visibility]',
           open ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-2 opacity-0',
         )}
       >
-        <div className="w-max max-w-[calc(100vw-2rem)] border border-line bg-surface p-8 shadow-xl shadow-ink/10">
-          <p className="inline-block border-b-2 border-accent pb-2 font-display text-sm tracking-widest text-accent uppercase">
+        <div className="w-max max-w-[calc(100vw-2rem)] rounded-card border border-ink/10 bg-bg p-8 shadow-soft">
+          <p className="inline-block border-b-2 border-gold pb-2 text-sm font-medium tracking-widest text-gold uppercase">
             {menu.title}
           </p>
 
@@ -91,7 +91,7 @@ const MegaMenu = ({ item }) => {
                     <Link
                       to={group.href}
                       onClick={closeMenu}
-                      className="font-display text-sm font-medium tracking-wider text-ink uppercase transition-colors hover:text-accent"
+                      className="text-sm font-medium tracking-wider text-ink uppercase transition-colors hover:text-gold"
                     >
                       {group.title}
                     </Link>
@@ -101,7 +101,7 @@ const MegaMenu = ({ item }) => {
                           <Link
                             to={link.href}
                             onClick={closeMenu}
-                            className="text-sm text-ink-muted transition-colors hover:text-accent"
+                            className="text-sm text-ink/70 transition-colors hover:text-gold"
                           >
                             {link.label}
                           </Link>
@@ -114,11 +114,11 @@ const MegaMenu = ({ item }) => {
             ))}
           </div>
 
-          <div className="mt-7 border-t border-line pt-4">
+          <div className="mt-7 border-t border-ink/10 pt-4">
             <Link
               to={item.href}
               onClick={closeMenu}
-              className="link-underline font-display text-xs tracking-widest text-accent uppercase"
+              className="link-underline text-xs font-medium tracking-widest text-gold uppercase"
             >
               {menu.viewAllLabel}
             </Link>

@@ -14,8 +14,8 @@ const Header = () => {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 bg-surface transition-shadow duration-300',
-        scrolled && 'shadow-md shadow-ink/5',
+        'sticky top-0 z-40 bg-bg transition-shadow duration-300',
+        scrolled && 'shadow-soft',
       )}
     >
       <AnnouncementBar messages={announcement.messages} />

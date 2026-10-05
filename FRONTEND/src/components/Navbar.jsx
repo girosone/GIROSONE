@@ -6,7 +6,7 @@ import MegaMenu from '@/components/MegaMenu'
 import { cn } from '@/utils/cn'
 
 const Navbar = ({ brand, navItems, menuId, menuOpen, onMenuOpen }) => (
-  <div className="border-b border-line bg-surface">
+  <div className="border-b border-ink/10 bg-bg">
     <div className="page-container grid h-16 grid-cols-[1fr_auto_1fr] items-center lg:h-20">
       <div className="-ml-2.5 flex items-center">
         <IconButton
@@ -34,8 +34,8 @@ const Navbar = ({ brand, navItems, menuId, menuOpen, onMenuOpen }) => (
                 to={item.href}
                 className={({ isActive }) =>
                   cn(
-                    'link-underline flex min-h-11 items-center font-display text-base tracking-wide uppercase transition-colors hover:text-accent xl:text-lg',
-                    isActive && 'text-accent',
+                    'link-underline flex min-h-11 items-center text-sm font-medium tracking-wider uppercase transition-colors hover:text-gold xl:text-base',
+                    isActive && 'text-gold',
                   )
                 }
               >

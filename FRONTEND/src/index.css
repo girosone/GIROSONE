@@ -1,18 +1,41 @@
 @import "tailwindcss";
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource/poppins/400.css";
+@import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/600.css";
 
-@theme {
+/* Design tokens from DESIGN.md. Spacing follows the 8px grid on Tailwind's
+   default scale: 2 = 8px, 4 = 16px, 6 = 24px, 8 = 32px.
+   `static` emits every token as a CSS variable, even before a utility uses it. */
+@theme static {
   --breakpoint-xs: 22.5rem;
 
-  --color-brand: #005b56;
-  --color-accent: #c68a00;
-  --color-surface: #ffffff;
-  --color-surface-muted: #f8f8f6;
-  --color-ink: #111111;
-  --color-ink-muted: #6b6b6b;
-  --color-line: #e5e5e5;
+  --color-bg: #f6f1e7;
+  --color-bg-alt: #ece2cc;
+  --color-olive: #4b5a34;
+  --color-gold: #8a6538;
+  --color-ink: #2a2a2a;
+  --color-white: #ffffff;
 
-  --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Playfair Display Variable", "Playfair Display", ui-serif, Georgia, serif;
+  --font-body: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-button: 999px;
+  --radius-card: 20px;
+  --radius-image: 24px;
+  --radius-input: 14px;
+
+  --shadow-soft: 0 10px 30px rgb(0 0 0 / 0.08);
+
+  --default-transition-duration: 300ms;
+  --default-transition-timing-function: ease;
+
+  --spacing-section: 3rem;
+  --spacing-hero: 4rem;
+
+  --container-tablet: 45rem;
+  --container-laptop: 71.25rem;
+  --container-desktop: 80rem;
 
   --animate-marquee: marquee 18s linear infinite;
 
@@ -27,7 +50,7 @@
   html {
     font-family: var(--font-body);
     color: var(--color-ink);
-    background-color: var(--color-surface);
+    background-color: var(--color-bg);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
@@ -38,23 +61,49 @@
   }
 
   body {
-    @apply min-h-dvh antialiased leading-relaxed;
+    @apply min-h-dvh text-base leading-relaxed antialiased;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-display);
-    @apply leading-tight tracking-wide;
+    font-family: var(--font-heading);
+    @apply leading-tight font-semibold text-balance;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h5,
+  h6 {
+    @apply text-base leading-snug font-semibold;
   }
 
   img {
     @apply h-auto max-w-full;
   }
 
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+  }
+
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-accent;
+    @apply outline-2 outline-offset-2 outline-gold;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -66,6 +115,7 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
   }
@@ -73,7 +123,6 @@
 
 @utility page-container {
   width: 100%;
-  max-width: 90rem;
   margin-inline: auto;
   padding-inline: 1rem;
 
@@ -81,8 +130,17 @@
     padding-inline: 1.5rem;
   }
 
+  @media (width >= 48rem) {
+    max-width: var(--container-tablet);
+  }
+
   @media (width >= 64rem) {
-    padding-inline: 2.5rem;
+    max-width: var(--container-laptop);
+    padding-inline: 2rem;
+  }
+
+  @media (width >= 80rem) {
+    max-width: var(--container-desktop);
   }
 }
 
@@ -95,10 +153,10 @@
     inset-inline: 0;
     bottom: -0.25rem;
     height: 2px;
-    background-color: var(--color-accent);
+    background-color: var(--color-gold);
     scale: 0 1;
     transform-origin: left;
-    transition: scale 0.3s ease;
+    transition: scale var(--default-transition-duration) var(--default-transition-timing-function);
   }
 
   &:hover::after,

@@ -2,7 +2,7 @@ import { Outlet, ScrollRestoration } from 'react-router'
 import Header from '@/components/Header'
 
 const MainLayout = () => (
-  <div className="flex min-h-dvh flex-col bg-surface">
+  <div className="flex min-h-dvh flex-col bg-bg">
     <Header />
     <main className="flex-1">
       <Outlet />

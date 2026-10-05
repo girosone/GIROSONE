@@ -56,7 +56,7 @@ Status: Completed (2026-10-05). Not committed yet.
 Status: Completed (2026-10-05). Not committed yet.
 
 ### Phase 1 — Design System / Shared UI
-Status: Pending
+Status: In progress. M1.1 completed (2026-10-05), not committed yet. M1.2–M1.4 pending.
 
 ### Phase 2 — Navigation / Routing
 Status: Pending
@@ -92,7 +92,8 @@ Status: Pending
 - `axios` and `react-scroll` are installed. `services/api.js` is the single Axios instance.
 - Backend exists: Express 5 + Mongoose 9, ES modules, `GET /api/health`, JSON 404 and error handling.
 - MongoDB connects through `MONGODB_URI` (local `mongodb://127.0.0.1:27017/girosone` in development). No models yet.
-- Folder structure matches PROJECT.md. The old teal/Oswald/Jost theme and 1440px container remain until Phase 1.
+- Folder structure matches PROJECT.md.
+- DESIGN.md tokens, self-hosted Playfair Display + Poppins and the 720 / 1140 / 1280 container are live in `index.css`. The old teal/Oswald/Jost theme is gone.
 
 ## Session Log
 ### Planning
@@ -181,6 +182,35 @@ Issues / notes:
 - `JWT_SECRET` / `JWT_EXPIRES_IN` are in `.env.example` but are not required at boot yet; add them to the required list in M6.1 when they are first used.
 - `helmet`, rate limiting and body-size limits are Phase 10 items and were not added.
 
+### M1.1 — Tokens & Global Styles (2026-10-05)
+Status: Completed.
+
+Changed:
+- Installed `@fontsource-variable/playfair-display` ^5.3.0 and `@fontsource/poppins` (400 / 500 / 600), imported from `index.css`. Fonts are bundled by Vite; the Google Fonts `<link>`s were removed from `index.html`.
+- `src/index.css` `@theme static`: colors `bg`, `bg-alt`, `olive`, `gold`, `ink`, `white`; `--font-heading`, `--font-body`; radii `button` 999px, `card` 20px, `image` 24px, `input` 14px; `--shadow-soft`; default transition 300ms ease; `--spacing-section` 48px, `--spacing-hero` 64px; containers `tablet` 720, `laptop` 1140, `desktop` 1280. `xs` breakpoint and the marquee animation are kept.
+- Base styles: beige page, charcoal Poppins body text, Playfair Display h1–h4 with a mobile-first scale (h1 36 → 48 → 60px), golden-brown `:focus-visible` outline and `::selection`, reduced-motion block.
+- `page-container` now follows DESIGN.md widths (100% → 720 → 1140 → 1280). `link-underline` uses the gold and transition tokens.
+- Removed tokens: `brand`, `accent`, `surface`, `surface-muted`, `ink-muted`, `line`, `font-display` (Oswald), Jost.
+- Existing components/pages only had class names swapped to the new tokens (`bg-bg`, `bg-olive`, `text-gold`, `text-ink/70`, `border-ink/10`, `shadow-soft`, `rounded-card`, `rounded-button`). Nav and announcement labels moved from Oswald to Poppins medium. No new components or sections.
+- `index.html` `theme-color` → olive.
+
+Verified:
+- `npm run lint` and `npm run build` pass with no warnings.
+- Chrome (playwright-core, dev server): all tokens resolve on `:root`; body is Poppins on `#F6F1E7`, h1 is Playfair Display 600; fonts report loaded and no request leaves localhost.
+- Container width 720 at 768px, full width at 1024px, 1280 at 1440px and 1920px. No horizontal scroll at 320 / 360 / 768 / 1024 / 1280 / 1440 / 1920.
+- Keyboard focus shows a 2px golden-brown outline with 2px offset.
+- Mega menu opens, lists the 4 categories, closes on Esc. Mobile drawer opens/closes and its accordion works at 320px and 360px. Menu button is 44×44. 404 page renders. No console errors or warnings.
+- `prefers-reduced-motion: reduce`: transitions collapse to ~0ms, smooth scroll is off, the marquee is replaced by static text, no running animations.
+
+Issues / notes:
+- Not committed.
+- `logo.webp` has a white background, which now shows as a white box on the beige header. Needs a transparent logo file (M1.3).
+- The golden-brown focus outline has low contrast on olive surfaces (about 1.4:1). Nothing focusable sits on olive yet; give olive bands a white outline when M1.2/M1.3 add buttons or links there.
+- `₹` is only in Poppins' Devanagari subset, so the current announcement text pulls one extra 39 kB font file. It goes away if the announcement copy changes in M1.3.
+- `favicon.svg` is still the Vite default.
+- `--color-bg-alt`, `rounded-image`, `rounded-input`, `py-section` and `py-hero` are defined but not used until M1.2+.
+- VS Code's built-in CSS linter flags `@theme` / `@apply` / `@utility` as unknown at-rules. The build is unaffected.
+
 ## Update Rules
 After each Claude milestone:
 1. Update that milestone's status.
@@ -191,4 +221,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M1.1 — Design tokens & global styles (Phase 1). Commit Phase 0 first.
+M1.2 — Core components (Phase 1). Commit M1.1 first.
