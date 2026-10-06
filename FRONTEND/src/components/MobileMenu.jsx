@@ -1,9 +1,10 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useId, useState } from 'react'
 import { Link, NavLink } from 'react-router'
 import { FiChevronDown, FiX } from 'react-icons/fi'
 import Collapsible from '@/components/Collapsible'
 import IconButton from '@/components/IconButton'
 import Logo from '@/components/Logo'
+import { useDialog } from '@/hooks/useDialog'
 import { cn } from '@/utils/cn'
 
 const rowClasses =
@@ -69,14 +70,7 @@ const MobileMenuAccordion = ({ item, onNavigate }) => {
 }
 
 const MobileMenu = ({ id, open, onClose, brand, navItems }) => {
-  const dialogRef = useRef(null)
-
-  useEffect(() => {
-    const dialog = dialogRef.current
-    if (!dialog) return
-    if (open && !dialog.open) dialog.showModal()
-    if (!open && dialog.open) dialog.close()
-  }, [open])
+  const dialogRef = useDialog(open)
 
   const handleBackdropClick = (event) => {
     if (event.target === event.currentTarget) onClose()

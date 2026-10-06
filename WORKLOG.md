@@ -56,7 +56,7 @@ Status: Completed (2026-10-05). Not committed yet.
 Status: Completed (2026-10-05). Not committed yet.
 
 ### Phase 1 — Design System / Shared UI
-Status: In progress. M1.1 completed (2026-10-05), not committed yet. M1.2–M1.4 pending.
+Status: In progress. M1.1 completed (2026-10-05). M1.2 completed (2026-10-06), not committed yet. M1.3–M1.4 pending.
 
 ### Phase 2 — Navigation / Routing
 Status: Pending
@@ -94,6 +94,7 @@ Status: Pending
 - MongoDB connects through `MONGODB_URI` (local `mongodb://127.0.0.1:27017/girosone` in development). No models yet.
 - Folder structure matches PROJECT.md.
 - DESIGN.md tokens, self-hosted Playfair Display + Poppins and the 720 / 1140 / 1280 container are live in `index.css`. The old teal/Oswald/Jost theme is gone.
+- Shared UI layer exists in `components/` (Button, Container, Section, SectionHeading, Loader, EmptyState, ErrorMessage, Modal, FormField, WeightSelector, ProductCard, CategoryCard). Dev-only preview at `/dev/components`.
 
 ## Session Log
 ### Planning
@@ -211,6 +212,37 @@ Issues / notes:
 - `--color-bg-alt`, `rounded-image`, `rounded-input`, `py-section` and `py-hero` are defined but not used until M1.2+.
 - VS Code's built-in CSS linter flags `@theme` / `@apply` / `@utility` as unknown at-rules. The build is unaffected.
 
+### M1.2 — Core Components (2026-10-06)
+Status: Completed.
+
+Changed:
+- New in `components/`: `Button` (primary / secondary, sm / md / lg, `fullWidth`, renders `<button>`, router `Link` via `to`, or `<a>` via `href`), `Container` (wraps `page-container`), `Section` (48px → 64px vertical rhythm, `tone` default / alt), `SectionHeading` (title, optional subtitle, golden-brown ornamental divider, centre / left), `Loader`, `EmptyState`, `ErrorMessage`, `Modal` (native `<dialog>`), `FormField` (`as` input / textarea / select with label, hint, error, required), `WeightSelector` (radio group), `ProductCard`, `CategoryCard`.
+- `ProductCard` and `CategoryCard` take objects shaped like the PLAN.md Product / Category models. `ProductCard` keeps only the selected weight as local state; the CTA is "Enquire Now" and links to the product page unless `ctaTo` (path or `(product, variant) => path`) is passed.
+- New `hooks/useDialog.js` (syncs a native `<dialog>` with an `open` flag), used by `Modal` and `MobileMenu`. New `utils/formatPrice.js` (`en-IN` INR).
+- `Logo`: `mix-blend-multiply` removes the white box on beige surfaces using the existing `logo.webp`; intrinsic `width`/`height` added. The logo itself is unchanged.
+- `NotFoundPage` now uses `Button` and `Container`.
+- `pages/ComponentShowcase.jsx` at `/dev/components`: temporary, registered only when `import.meta.env.DEV`, lazy-loaded. Remove in M9.5.
+- No packages added. No new colors, fonts, radii or shadows.
+
+Verified:
+- `npm run lint` and `npm run build` pass with no warnings. The showcase is not in the production bundle. No hex values in `components/`, `pages/`, `hooks/`, `utils/`.
+- Chrome (playwright-core, dev server) at 320 / 360 / 768 / 1024 / 1280 / 1440: no horizontal scroll, no console errors or warnings, every link / button / field / weight pill in the showcase is at least 44px tall. Container is 720 at 768px and 1280 at 1280px+.
+- Button: golden-brown / white / 999px / 300ms, hover lifts 2px with the soft shadow, secondary is transparent with olive border and text, disabled is non-interactive at 50% opacity.
+- ProductCard: weight change updates the price by click and by arrow keys (₹240 → ₹1,200 → ₹240); card lifts on hover; 20px radius, soft shadow. CategoryCard image zooms to 1.05 on hover.
+- FormField: 14px radius, `aria-invalid` + `aria-describedby` on error, `required` passed through.
+- Modal: opens as a modal with an accessible name, focus stays inside, closes on Esc, close button and backdrop click, focus returns to the trigger.
+- Reduced motion: transitions collapse to ~0ms, the spinner is replaced by its text label, no running animations.
+- Existing behaviour: mobile drawer opens / closes and its accordion lists the 4 categories, mega menu opens, 404 page renders. Logo shows no white box in the header or the drawer.
+
+Issues / notes:
+- Not committed.
+- The logo fix is CSS only, so it works on light surfaces. On an olive or dark band the logo would darken; that still needs a transparent logo file. `logo.webp` is 900×230 and its dark-blue wordmark is not in the DESIGN.md palette (asset question for the owner, not changed).
+- DESIGN.md has no error / danger color. `FormField` and `ErrorMessage` show errors with charcoal text, a stronger border and an icon. Add a token to DESIGN.md if a red is wanted.
+- `ProductCard`'s "Enquire Now" links to the product page for now. The prefilled inquiry link is wired through `ctaTo` when the Contact / Wholesale forms exist (Phase 5).
+- No stock display on the card yet (`StockBadge` is Phase 4). `PriceTag` was not split out; the price is formatted inline with `formatPrice`.
+- The showcase uses the logo as a stand-in image, since `assets/images` is still empty.
+- Still open from M1.1: focus-ring contrast on olive surfaces, the default Vite favicon, the announcement copy.
+
 ## Update Rules
 After each Claude milestone:
 1. Update that milestone's status.
@@ -221,4 +253,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M1.2 — Core components (Phase 1). Commit M1.1 first.
+M1.3 — Announcement bar & navbar shell (Phase 1). Commit M1.2 first.

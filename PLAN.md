@@ -34,9 +34,9 @@
 
 ---
 
-## Current State (as of 2026-10-05)
+## Current State (as of 2026-10-06)
 
-Phase 0 (M0.1–M0.3) and M1.1 are complete.
+Phase 0 (M0.1–M0.3), M1.1 and M1.2 are complete.
 
 | Area | Status |
 |------|--------|
@@ -55,10 +55,11 @@ Phase 0 (M0.1–M0.3) and M1.1 are complete.
 | M0.3 validation | Health check, 404/500, env and bad-URI failures, and the frontend Axios call all passed |
 | M0.2 validation | Lint, build, desktop/mobile browser checks passed |
 | Design tokens | M1.1 done: DESIGN.md tokens in `index.css` (`@theme`), self-hosted Playfair Display + Poppins via Fontsource, 720 / 1140 / 1280 container, golden-brown focus ring, reduced-motion support |
+| Core components | M1.2 done: `Button`, `Container`, `Section`, `SectionHeading`, `Loader`, `EmptyState`, `ErrorMessage`, `Modal`, `FormField`, `WeightSelector`, `ProductCard`, `CategoryCard`; `useDialog` hook; `formatPrice` util. `ProductCard`, `CategoryCard`, `WeightSelector` and `FormField` were built ahead of their P3 / P5 slots in the inventory. Dev-only showcase at `/dev/components` |
 
 The old teal/Oswald/Jost styling has been removed. Navigation routes and final navigation behaviour will be completed during Phase 2.
 
-Next milestone: **M1.2 Core components**.
+Next milestone: **M1.3 Announcement bar & navbar shell**.
 
 ## Architecture Summary
 
