@@ -1,7 +1,11 @@
 import logo from '@/assets/logo/logo.webp'
 
+// Same shape as the planned Announcement model. `backgroundColor: null` keeps
+// the default olive bar.
 export const announcement = {
-  messages: ['Premium Indian Spices', 'Free Shipping Above ₹799'],
+  text: 'GIROSONE Spices & Foods · Quality · Trust · Excellence',
+  active: true,
+  backgroundColor: null,
 }
 
 export const brand = {
@@ -12,13 +16,12 @@ export const brand = {
 }
 
 export const mainNavigation = [
+  { id: 'home', label: 'Home', href: '/' },
   {
     id: 'shop',
     label: 'Shop by Categories',
-    href: '/shop',
     menu: {
       title: 'Shop by Categories',
-      viewAllLabel: 'Shop all spices',
       groups: [
         {
           id: 'tea',

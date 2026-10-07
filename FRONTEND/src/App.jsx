@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   {
     element: <MainLayout />,
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <HomePage />, handle: { transparentHeader: true } },
       ...devRoutes,
       { path: '*', element: <NotFoundPage /> },
     ],

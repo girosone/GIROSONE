@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import { FiChevronDown } from 'react-icons/fi'
 import { cn } from '@/utils/cn'
 import { splitIntoColumns } from '@/utils/splitIntoColumns'
@@ -9,12 +9,27 @@ const CLOSE_DELAY_MS = 150
 const MegaMenu = ({ item }) => {
   const [open, setOpen] = useState(false)
   const panelId = useId()
+  const rootRef = useRef(null)
   const triggerRef = useRef(null)
   const closeTimer = useRef(null)
   const { menu } = item
   const columns = splitIntoColumns(menu.groups, 2)
+  const { pathname } = useLocation()
+  const active = menu.groups.some(
+    (group) => pathname === group.href || group.items.some((link) => pathname === link.href),
+  )
 
   useEffect(() => () => clearTimeout(closeTimer.current), [])
+
+  // Safari does not focus a clicked button, so blur alone misses outside clicks.
+  useEffect(() => {
+    if (!open) return
+    const handlePointerDown = (event) => {
+      if (!rootRef.current?.contains(event.target)) setOpen(false)
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [open])
 
   const openMenu = () => {
     clearTimeout(closeTimer.current)
@@ -47,6 +62,7 @@ const MegaMenu = ({ item }) => {
 
   return (
     <li
+      ref={rootRef}
       className="relative"
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
@@ -61,7 +77,7 @@ const MegaMenu = ({ item }) => {
         onClick={() => (open ? closeMenu() : openMenu())}
         className={cn(
           'link-underline flex min-h-11 items-center gap-1 text-sm font-medium tracking-wider uppercase transition-colors hover:text-gold xl:text-base',
-          open && 'text-gold',
+          (open || active) && 'text-gold',
         )}
       >
         {item.label}
@@ -112,16 +128,6 @@ const MegaMenu = ({ item }) => {
                 ))}
               </div>
             ))}
-          </div>
-
-          <div className="mt-7 border-t border-ink/10 pt-4">
-            <Link
-              to={item.href}
-              onClick={closeMenu}
-              className="link-underline text-xs font-medium tracking-widest text-gold uppercase"
-            >
-              {menu.viewAllLabel}
-            </Link>
           </div>
         </div>
       </div>

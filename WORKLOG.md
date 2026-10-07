@@ -56,10 +56,10 @@ Status: Completed (2026-10-05). Not committed yet.
 Status: Completed (2026-10-05). Not committed yet.
 
 ### Phase 1 — Design System / Shared UI
-Status: In progress. M1.1 completed (2026-10-05). M1.2 completed (2026-10-06), not committed yet. M1.3–M1.4 pending.
+Status: In progress. M1.1 completed (2026-10-05). M1.2 and M1.3 completed (2026-10-06); M1.3 not committed yet. M1.4 (Footer) pending.
 
 ### Phase 2 — Navigation / Routing
-Status: Pending
+Status: In progress. M2.2, M2.3 and the navbar part of M2.4 were built with M1.3 (2026-10-06), not committed yet. M2.1 (route stubs) and the React Scroll anchors / back-to-top part of M2.4 pending.
 
 ### Phase 3 — Home Page
 Status: Pending
@@ -95,6 +95,7 @@ Status: Pending
 - Folder structure matches PROJECT.md.
 - DESIGN.md tokens, self-hosted Playfair Display + Poppins and the 720 / 1140 / 1280 container are live in `index.css`. The old teal/Oswald/Jost theme is gone.
 - Shared UI layer exists in `components/` (Button, Container, Section, SectionHeading, Loader, EmptyState, ErrorMessage, Modal, FormField, WeightSelector, ProductCard, CategoryCard). Dev-only preview at `/dev/components`.
+- Site shell is announcement bar → sticky navbar → page. The navbar is transparent over Home (route `handle: { transparentHeader: true }`) and solid elsewhere. Desktop mega menu and mobile drawer are complete. Only `/` and the 404 page exist as routes.
 
 ## Session Log
 ### Planning
@@ -243,6 +244,44 @@ Issues / notes:
 - The showcase uses the logo as a stand-in image, since `assets/images` is still empty.
 - Still open from M1.1: focus-ring contrast on olive surfaces, the default Vite favicon, the announcement copy.
 
+### M1.3 — Announcement bar & navigation (2026-10-06)
+Status: Completed. The request called this "M1.3 + M1.4" and described the full navigation system. In PLAN.md that is M1.3 plus M2.2, M2.3 and the navbar part of M2.4; PLAN.md's M1.4 is the Footer, which was not part of the request and is not built.
+
+Changed:
+- `AnnouncementBar`: now takes `text`, `active`, `backgroundColor` (the planned Announcement model). Hidden when `active` is false or the text is empty. Default background is the olive token; a `backgroundColor` value is applied inline. Long text wraps and stays centred on mobile; the marquee and its keyframes were removed.
+- `data/navigation.js`: `announcement` reshaped to `{ text, active, backgroundColor }` with new copy ("GIROSONE Spices & Foods · Quality · Trust · Excellence", no shipping claim). `Home` added as the first nav item. The `/shop` href and "Shop all spices" link were removed, since no such route is planned. Category groups are unchanged.
+- `MainLayout`: renders `AnnouncementBar` → `Header` → `main`. Reads `handle.transparentHeader` from the matched routes with `useMatches`. The index route in `App.jsx` sets it.
+- `Header`: only the navbar is sticky; the announcement bar scrolls away. Fixed height from `--header-height` (64px mobile, 128px from 1024px, defined in `index.css`). In overlay mode it has a negative bottom margin so the page runs underneath, is transparent at the top and turns solid beige with the soft shadow after 8px of scroll. On other routes it is solid from the start. The drawer closes if the viewport reaches the desktop breakpoint.
+- `Navbar`: logo row plus centred link row (desktop), hamburger trigger (below 1024px). The bottom border was dropped so the height is exact.
+- New `MenuIcon`: three bars that morph into a close icon. Used by the navbar trigger and by the drawer's close button, where the morph replays as the drawer opens. `IconButton` now accepts children as an alternative to `icon`.
+- `MegaMenu`: closes on an outside pointer press (covers Safari, which does not focus a clicked button), trigger is highlighted on category / product routes, view-all link removed. Hover, click, Enter, Esc and focus-leave handling were already there.
+- `MobileMenu`: uses `MenuIcon` for the close button, view-all link removed. Scroll lock, focus trap, Esc and focus return come from the native `<dialog>`.
+- `Logo`: `logo.webp` regenerated from `logo.png` with a transparent background (600×153, white removed by colour-to-alpha). `mix-blend-multiply` removed: it stopped working once the logo sat inside the transparent sticky header. The link is now at least 44px tall.
+- `HomePage` placeholder: beige-alt band with `pt-(--header-height)` so it sits under the transparent navbar the way the hero will.
+- No packages added.
+
+Verified:
+- `npm run lint` and `npm run build` pass with no warnings. No hex values in `components/`, `layouts/`, `pages/`, `hooks/`.
+- Chrome (playwright-core, dev server), 174 checks, no console errors or warnings:
+  - 320 / 360 / 768 / 1024 / 1280 / 1440 on `/` and `/about`: no horizontal scroll; bar sits directly above the navbar; Home content starts under the navbar, other pages below it; navbar transparent at the top of Home and solid elsewhere; after scrolling it is stuck at the top, solid, shadowed and the same height; transparent again back at the top.
+  - Desktop (1024, 1280): nav order Home · Shop by Categories · About Us · Wholesale · Contact; mega menu opens on hover, click and Enter, shows the 4 categories in two columns, stays inside the viewport, closes on mouse leave, Esc (focus back on the trigger), outside click, focus leaving and link click; golden-brown focus ring; active link follows the route; trigger highlighted on `/category/hing`.
+  - Mobile / tablet (320, 360, 768, touch): 44px hamburger with `aria-expanded` / `aria-controls` / `aria-haspopup`; drawer opens as a modal, page scroll locked, focus trapped; accordion expands to the 4 categories and collapses; every drawer target is at least 44px; closes on Esc (focus back on the trigger), close button, backdrop tap, link tap and on resize to desktop; active route highlighted.
+  - AnnouncementBar returns nothing when inactive or empty and applies a custom background.
+  - Reduced motion: header, drawer and icon transitions collapse to ~0ms and the drawer opens instantly.
+
+Issues / notes:
+- Not committed.
+- `/about`, `/wholesale`, `/contact`, `/category/:slug` and `/product/:slug` still render the 404 page until M2.1 adds the stubs.
+- Footer (PLAN.md M1.4), React Scroll in-page anchors and the back-to-top button (M2.4) are not built.
+- The Home placeholder is plain beige, so the transparent navbar has not been checked over real hero photography. The logo and charcoal links assume a light hero (DESIGN.md: warm beige); revisit in M3.2.
+- A custom announcement `backgroundColor` keeps white text. A light colour would need a text colour too; decide in M8.1.
+- DESIGN.md lists the navbar animation as "Slide". Implemented: background / shadow fade on scroll and a short slide on the mega menu panel. The navbar itself does not slide in or out.
+- The sticky desktop navbar is 128px tall (logo row + link row). It could be reduced to the link row on scroll later if it feels heavy.
+- `logo.webp` grew from 28 kB to 85 kB because of the alpha channel. The wordmark is still dark blue and still only suits light surfaces.
+- Not tested in Firefox or Safari. The drawer and icon entry animations use `@starting-style` and `transition-behavior: allow-discrete`; older browsers open the drawer without the animation.
+- `react-icons` `FiMenu` / `FiX` are no longer used. `IconButton`'s `badge` and `to` props and `logo.png` are still unused.
+- Still open: focus-ring contrast on olive surfaces, the default Vite favicon.
+
 ## Update Rules
 After each Claude milestone:
 1. Update that milestone's status.
@@ -253,4 +292,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M1.3 — Announcement bar & navbar shell (Phase 1). Commit M1.2 first.
+M1.4 — Footer (Phase 1), then M2.1 — Routes & stubs. Commit M1.3 first.

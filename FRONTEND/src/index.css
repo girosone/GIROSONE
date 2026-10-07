@@ -36,17 +36,18 @@
   --container-tablet: 45rem;
   --container-laptop: 71.25rem;
   --container-desktop: 80rem;
-
-  --animate-marquee: marquee 18s linear infinite;
-
-  @keyframes marquee {
-    to {
-      translate: -50% 0;
-    }
-  }
 }
 
 @layer base {
+  /* Navbar height: logo row on mobile, logo row + link row on desktop. */
+  :root {
+    --header-height: 4rem;
+
+    @media (width >= 64rem) {
+      --header-height: 8rem;
+    }
+  }
+
   html {
     font-family: var(--font-body);
     color: var(--color-ink);

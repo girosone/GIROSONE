@@ -1,9 +1,10 @@
 import { useId, useState } from 'react'
 import { Link, NavLink } from 'react-router'
-import { FiChevronDown, FiX } from 'react-icons/fi'
+import { FiChevronDown } from 'react-icons/fi'
 import Collapsible from '@/components/Collapsible'
 import IconButton from '@/components/IconButton'
 import Logo from '@/components/Logo'
+import MenuIcon from '@/components/MenuIcon'
 import { useDialog } from '@/hooks/useDialog'
 import { cn } from '@/utils/cn'
 
@@ -56,13 +57,6 @@ const MobileMenuAccordion = ({ item, onNavigate }) => {
               </ul>
             </div>
           ))}
-          <Link
-            to={item.href}
-            onClick={onNavigate}
-            className="flex min-h-11 items-center text-xs font-medium tracking-widest text-gold uppercase"
-          >
-            {item.menu.viewAllLabel}
-          </Link>
         </div>
       </Collapsible>
     </li>
@@ -88,7 +82,9 @@ const MobileMenu = ({ id, open, onClose, brand, navItems }) => {
       <div className="flex h-full flex-col">
         <div className="flex h-16 shrink-0 items-center justify-between border-b border-ink/10 px-4">
           <Logo brand={brand} onClick={onClose} className="items-start" />
-          <IconButton icon={FiX} label="Close menu" onClick={onClose} className="-mr-2.5" />
+          <IconButton label="Close menu" onClick={onClose} className="-mr-2.5">
+            <MenuIcon open animateIn />
+          </IconButton>
         </div>
 
         <nav aria-label="Mobile" className="flex-1 overflow-y-auto overscroll-contain px-4">

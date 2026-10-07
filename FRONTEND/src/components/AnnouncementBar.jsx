@@ -1,39 +1,21 @@
-import { Fragment } from 'react'
+import { cn } from '@/utils/cn'
 
-const Messages = ({ messages }) =>
-  messages.map((message, index) => (
-    <Fragment key={message}>
-      {index > 0 && (
-        <span aria-hidden="true" className="text-white/50">
-          |
-        </span>
-      )}
-      <span className="whitespace-nowrap">{message}</span>
-    </Fragment>
-  ))
-
-const AnnouncementBar = ({ messages = [] }) => {
-  if (!messages.length) return null
+// Props mirror the planned Announcement model ({ text, active, backgroundColor }),
+// so the API response can be spread straight in later. Without a
+// backgroundColor the bar falls back to the olive token.
+const AnnouncementBar = ({ text, active = true, backgroundColor, className }) => {
+  if (!active || !text?.trim()) return null
 
   return (
-    <div className="flex h-9 items-center overflow-hidden bg-olive text-xs font-medium tracking-wider text-white sm:text-sm">
-      <p className="sr-only md:hidden motion-reduce:hidden">{messages.join('. ')}</p>
-
-      <p className="page-container hidden items-center justify-center gap-3 truncate md:flex motion-reduce:flex">
-        <Messages messages={messages} />
+    <aside
+      aria-label="Announcement"
+      style={backgroundColor ? { backgroundColor } : undefined}
+      className={cn('bg-olive text-white', className)}
+    >
+      <p className="page-container flex min-h-9 items-center justify-center py-2 text-center text-xs leading-snug font-medium tracking-wider text-balance sm:text-sm">
+        {text}
       </p>
-
-      <div
-        aria-hidden="true"
-        className="flex w-max animate-marquee hover:[animation-play-state:paused] md:hidden motion-reduce:hidden"
-      >
-        {[0, 1].map((copy) => (
-          <div key={copy} className="flex min-w-screen shrink-0 items-center justify-around gap-6 px-3">
-            <Messages messages={messages} />
-          </div>
-        ))}
-      </div>
-    </div>
+    </aside>
   )
 }
 

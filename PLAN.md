@@ -36,7 +36,7 @@
 
 ## Current State (as of 2026-10-06)
 
-Phase 0 (M0.1–M0.3), M1.1 and M1.2 are complete.
+Phase 0 (M0.1–M0.3) and M1.1–M1.3 are complete. The navigation behaviour of M2.2, M2.3 and M2.4 (navbar part) was built together with M1.3. M1.4 (Footer) and M2.1 (route stubs) are still open.
 
 | Area | Status |
 |------|--------|
@@ -57,9 +57,13 @@ Phase 0 (M0.1–M0.3), M1.1 and M1.2 are complete.
 | Design tokens | M1.1 done: DESIGN.md tokens in `index.css` (`@theme`), self-hosted Playfair Display + Poppins via Fontsource, 720 / 1140 / 1280 container, golden-brown focus ring, reduced-motion support |
 | Core components | M1.2 done: `Button`, `Container`, `Section`, `SectionHeading`, `Loader`, `EmptyState`, `ErrorMessage`, `Modal`, `FormField`, `WeightSelector`, `ProductCard`, `CategoryCard`; `useDialog` hook; `formatPrice` util. `ProductCard`, `CategoryCard`, `WeightSelector` and `FormField` were built ahead of their P3 / P5 slots in the inventory. Dev-only showcase at `/dev/components` |
 
-The old teal/Oswald/Jost styling has been removed. Navigation routes and final navigation behaviour will be completed during Phase 2.
+| Announcement bar | M1.3 done: `AnnouncementBar` takes `text`, `active`, `backgroundColor` (the Announcement model shape) from `data/navigation.js`. It scrolls away with the page; only the navbar is sticky |
+| Navigation | M1.3 + M2.2 / M2.3 / M2.4 (navbar part) done: Home · SHOP BY CATEGORIES · ABOUT US · WHOLESALE · CONTACT, desktop mega menu, mobile slide drawer with animated hamburger and category accordion, sticky navbar that is transparent over the Home hero and solid elsewhere (route `handle.transparentHeader`, `--header-height`) |
+| Logo | `logo.webp` regenerated from `logo.png` with a transparent background |
 
-Next milestone: **M1.3 Announcement bar & navbar shell**.
+The old teal/Oswald/Jost styling has been removed. Still open in Phase 2: M2.1 route stubs (the nav links currently land on the 404 page), and the React Scroll anchors and back-to-top button from M2.4.
+
+Next milestone: **M1.4 Footer**, then **M2.1 Routes & stubs**.
 
 ## Architecture Summary
 

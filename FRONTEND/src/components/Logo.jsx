@@ -6,18 +6,17 @@ const Logo = ({ brand, className, onClick }) => (
     to={brand.href}
     aria-label={`${brand.name} home`}
     onClick={onClick}
-    className={cn('flex flex-col items-center leading-none', className)}
+    className={cn('flex min-h-11 flex-col items-center justify-center leading-none', className)}
   >
     {brand.logo ? (
-      // The logo file has a white background. Multiply blends it into the
-      // beige surface behind it, so use the logo on light surfaces only.
+      // Transparent background, dark wordmark: use on light surfaces only.
       <img
         src={brand.logo}
         alt=""
-        width={900}
-        height={230}
+        width={600}
+        height={153}
         decoding="async"
-        className="h-auto w-28 mix-blend-multiply xs:w-36 sm:w-44 lg:w-56"
+        className="h-auto w-28 xs:w-36 sm:w-44 lg:w-56"
       />
     ) : (
       <>
