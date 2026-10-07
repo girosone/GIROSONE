@@ -56,10 +56,10 @@ Status: Completed (2026-10-05). Not committed yet.
 Status: Completed (2026-10-05). Not committed yet.
 
 ### Phase 1 — Design System / Shared UI
-Status: In progress. M1.1 completed (2026-10-05). M1.2 and M1.3 completed (2026-10-06); M1.3 not committed yet. M1.4 (Footer) pending.
+Status: Completed. M1.1 (2026-10-05), M1.2 and M1.3 (2026-10-06), M1.4 Footer (2026-10-07). M1.4 not committed yet.
 
 ### Phase 2 — Navigation / Routing
-Status: In progress. M2.2, M2.3 and the navbar part of M2.4 were built with M1.3 (2026-10-06), not committed yet. M2.1 (route stubs) and the React Scroll anchors / back-to-top part of M2.4 pending.
+Status: In progress. M2.2, M2.3 and the navbar part of M2.4 were implemented early, in the M1.3 session (2026-10-06). M2.1 (route stubs) and the React Scroll anchors / back-to-top part of M2.4 pending.
 
 ### Phase 3 — Home Page
 Status: Pending
@@ -95,7 +95,7 @@ Status: Pending
 - Folder structure matches PROJECT.md.
 - DESIGN.md tokens, self-hosted Playfair Display + Poppins and the 720 / 1140 / 1280 container are live in `index.css`. The old teal/Oswald/Jost theme is gone.
 - Shared UI layer exists in `components/` (Button, Container, Section, SectionHeading, Loader, EmptyState, ErrorMessage, Modal, FormField, WeightSelector, ProductCard, CategoryCard). Dev-only preview at `/dev/components`.
-- Site shell is announcement bar → sticky navbar → page. The navbar is transparent over Home (route `handle: { transparentHeader: true }`) and solid elsewhere. Desktop mega menu and mobile drawer are complete. Only `/` and the 404 page exist as routes.
+- Site shell is announcement bar → sticky navbar → page → footer. The navbar is transparent over Home (route `handle: { transparentHeader: true }`) and solid elsewhere. Desktop mega menu and mobile drawer are complete. Only `/` and the 404 page exist as routes.
 
 ## Session Log
 ### Planning
@@ -244,8 +244,16 @@ Issues / notes:
 - The showcase uses the logo as a stand-in image, since `assets/images` is still empty.
 - Still open from M1.1: focus-ring contrast on olive surfaces, the default Vite favicon, the announcement copy.
 
-### M1.3 — Announcement bar & navigation (2026-10-06)
-Status: Completed. The request called this "M1.3 + M1.4" and described the full navigation system. In PLAN.md that is M1.3 plus M2.2, M2.3 and the navbar part of M2.4; PLAN.md's M1.4 is the Footer, which was not part of the request and is not built.
+### M1.3 — Announcement bar & navbar shell, with M2.2–M2.4 navigation implemented early (2026-10-06)
+Status: M1.3 completed. M2.2, M2.3 and the navbar part of M2.4 implemented early. M1.4 (Footer) not started.
+
+Milestone ownership (per PLAN.md; corrected 2026-10-07):
+- M1.3: `AnnouncementBar`, the announcement data and copy, the announcement bar → navbar → page hierarchy in `MainLayout`, the re-themed navbar shell (logo row, link row, hamburger trigger), the transparent logo file.
+- M2.2 (early): Home nav item and nav order, `MegaMenu` behaviour, removal of the `/shop` link.
+- M2.3 (early): `MenuIcon` hamburger animation, `MobileMenu` changes, `IconButton` children, drawer closing at the desktop breakpoint.
+- M2.4, navbar part (early): sticky `Header`, transparent over Home and solid elsewhere, `--header-height`, route `handle.transparentHeader`, the `HomePage` placeholder offset.
+- M1.4 is the Footer. The request labelled this work "M1.3 + M1.4", but no Footer work was requested or done.
+- Not done in Phase 2: M2.1 route stubs; M2.4 React Scroll anchors and back-to-top.
 
 Changed:
 - `AnnouncementBar`: now takes `text`, `active`, `backgroundColor` (the planned Announcement model). Hidden when `active` is false or the text is empty. Default background is the olive token; a `backgroundColor` value is applied inline. Long text wraps and stays centred on mobile; the marquee and its keyframes were removed.
@@ -273,13 +281,51 @@ Issues / notes:
 - Not committed.
 - `/about`, `/wholesale`, `/contact`, `/category/:slug` and `/product/:slug` still render the 404 page until M2.1 adds the stubs.
 - Footer (PLAN.md M1.4), React Scroll in-page anchors and the back-to-top button (M2.4) are not built.
-- The Home placeholder is plain beige, so the transparent navbar has not been checked over real hero photography. The logo and charcoal links assume a light hero (DESIGN.md: warm beige); revisit in M3.2.
+- Real Hero verification is deferred: the Home placeholder is plain beige, so the transparent navbar has not been checked over real hero photography. The logo and charcoal links assume a light hero (DESIGN.md: warm beige). Verify in M3.2 before treating M2.4 as fully validated.
 - A custom announcement `backgroundColor` keeps white text. A light colour would need a text colour too; decide in M8.1.
 - DESIGN.md lists the navbar animation as "Slide". Implemented: background / shadow fade on scroll and a short slide on the mega menu panel. The navbar itself does not slide in or out.
 - The sticky desktop navbar is 128px tall (logo row + link row). It could be reduced to the link row on scroll later if it feels heavy.
 - `logo.webp` grew from 28 kB to 85 kB because of the alpha channel. The wordmark is still dark blue and still only suits light surfaces.
 - Not tested in Firefox or Safari. The drawer and icon entry animations use `@starting-style` and `transition-behavior: allow-discrete`; older browsers open the drawer without the animation.
 - `react-icons` `FiMenu` / `FiX` are no longer used. `IconButton`'s `badge` and `to` props and `logo.png` are still unused.
+- Still open: focus-ring contrast on olive surfaces, the default Vite favicon.
+
+### M1.4 — Footer (2026-10-07)
+Status: Completed.
+
+Changed:
+- New `components/Footer.jsx`, rendered by `MainLayout` after `main`. Reuses `Logo`, `Button`, `Container` and `Collapsible`.
+- Background is the secondary cream token (`bg-bg-alt`) with a hairline top border, so the footer reads as its own band against the primary cream page.
+- Blocks: logo + brand line, Wholesale (short line + primary `Button` → `/wholesale`), Quick Links, Categories, Contact (phone as `tel:`, email as `mailto:`, address in an `<address>`), copyright bar with the current year.
+- Layout: below 768px one column, with Quick Links and Categories as accordions and Contact always visible; the CTA button is full width below 640px. From 768px two rows (brand | wholesale, then Quick Links | Categories | Contact). From 1024px four columns, with the Wholesale block under the brand line in the first column.
+- New `data/footer.js`: `contact` (same fields as the planned SiteSettings model) and `footer` (legal name, brand line, link groups, wholesale copy). Quick Links and Categories are derived from `mainNavigation`, so routes are defined once.
+- New `hooks/useMediaQuery.js`: the footer uses it to switch the link groups between accordion and open column, because `Collapsible` marks a closed panel `inert`.
+- No packages added. No new tokens. Announcement bar and navbar untouched.
+
+Verified:
+- `npm run lint` and `npm run build` pass with no warnings. No hex values in `components/`, `data/`, `hooks/`.
+- Chrome (playwright-core, dev server), 423 checks at 320 / 360 / 768 / 1024 / 1280 / 1440 on `/` and `/about`, no console errors or warnings. 411 passed; the 12 failures were checked by hand and are test artefacts (see notes).
+  - No horizontal scroll, nothing in the footer overflows the viewport, footer sits after `main` at the bottom of the page, announcement bar and header still present.
+  - Content: logo, brand line, 4 quick links, 4 categories with `/category/:slug` hrefs, phone, email, address, CTA, copyright.
+  - Mobile (320, 360, touch): accordion buttons are 56px with `aria-expanded` / `aria-controls`; panels start collapsed and `inert`, open on tap, toggle with Enter and Space; every link and button is at least 44px; CTA is full width.
+  - Tablet / desktop: no accordion buttons, Quick Links / Categories / Contact share a row, no link label wraps; from 1024px the brand column sits in the same row.
+  - CTA is the primary `Button` (golden brown, white text, 999px). Footer links, CTA and logo navigate, and the page returns to the top.
+  - Keyboard at 1280px: tab order matches the visual order (logo, CTA, quick links, categories, phone, email); 2px golden-brown focus ring.
+  - Contrast on the footer background: body text 6.4:1, olive headings 5.8:1, button label 5.3:1.
+  - Resize 360 → 1280 → 360 switches between accordion and columns. Reduced motion collapses the accordion transition.
+  - Mega menu and mobile drawer still open.
+
+Issues / notes:
+- Not committed.
+- The 12 failed checks: Playwright's role queries still list links inside an `inert` panel (keyboard Tab does skip them, checked separately), and the scroll-to-top check sampled the page mid smooth-scroll (it reaches 0 within about 600ms).
+- Footer links to `/about`, `/wholesale`, `/contact` and `/category/:slug` land on the 404 page until M2.1.
+- Contact details are the ones PLAN.md M5.3 lists from the packaging. The `+91` prefix on the phone number is an addition; confirm with the owner.
+- The brand line and the wholesale line are placeholder copy written for this milestone. They move to the CMS in Phase 8.
+- Link hover uses golden brown, which is 4.1:1 on the footer background (resting text is 6.4:1).
+- `logo.webp` has built-in transparent padding, so the footer logo sits a few pixels right of the text edge.
+- No social links or newsletter: neither is in PROJECT.md (newsletter is listed under Future / not required).
+- `Header` still has its own inline `matchMedia` effect; it was not moved to `useMediaQuery` to keep the navbar untouched.
+- Not tested in Firefox or Safari.
 - Still open: focus-ring contrast on olive surfaces, the default Vite favicon.
 
 ## Update Rules
@@ -292,4 +338,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M1.4 — Footer (Phase 1), then M2.1 — Routes & stubs. Commit M1.3 first.
+M2.1 — Routes & stubs (Phase 2). Commit M1.4 first.

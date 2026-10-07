@@ -34,9 +34,9 @@
 
 ---
 
-## Current State (as of 2026-10-06)
+## Current State (as of 2026-10-07)
 
-Phase 0 (M0.1–M0.3) and M1.1–M1.3 are complete. The navigation behaviour of M2.2, M2.3 and M2.4 (navbar part) was built together with M1.3. M1.4 (Footer) and M2.1 (route stubs) are still open.
+Phase 0 (M0.1–M0.3) and Phase 1 (M1.1–M1.4) are complete. In Phase 2, M2.2 (desktop navigation + mega menu), M2.3 (mobile drawer) and the navbar part of M2.4 (sticky, transparent → solid) were implemented early, in the same session as M1.3. M2.1 (route stubs) and the rest of M2.4 (React Scroll anchors, back-to-top) are still open.
 
 | Area | Status |
 |------|--------|
@@ -58,12 +58,14 @@ Phase 0 (M0.1–M0.3) and M1.1–M1.3 are complete. The navigation behaviour of 
 | Core components | M1.2 done: `Button`, `Container`, `Section`, `SectionHeading`, `Loader`, `EmptyState`, `ErrorMessage`, `Modal`, `FormField`, `WeightSelector`, `ProductCard`, `CategoryCard`; `useDialog` hook; `formatPrice` util. `ProductCard`, `CategoryCard`, `WeightSelector` and `FormField` were built ahead of their P3 / P5 slots in the inventory. Dev-only showcase at `/dev/components` |
 
 | Announcement bar | M1.3 done: `AnnouncementBar` takes `text`, `active`, `backgroundColor` (the Announcement model shape) from `data/navigation.js`. It scrolls away with the page; only the navbar is sticky |
-| Navigation | M1.3 + M2.2 / M2.3 / M2.4 (navbar part) done: Home · SHOP BY CATEGORIES · ABOUT US · WHOLESALE · CONTACT, desktop mega menu, mobile slide drawer with animated hamburger and category accordion, sticky navbar that is transparent over the Home hero and solid elsewhere (route `handle.transparentHeader`, `--header-height`) |
+| Navbar shell | M1.3 done: re-themed logo row, link row and mobile hamburger trigger |
+| Navigation behaviour | Implemented early (Phase 2 scope). M2.2: nav order Home · SHOP BY CATEGORIES · ABOUT US · WHOLESALE · CONTACT and the desktop mega menu. M2.3: mobile slide drawer with animated hamburger and category accordion. M2.4 (navbar part): sticky navbar, transparent over the Home hero and solid elsewhere (route `handle.transparentHeader`, `--header-height`). Not yet verified over a real hero image (M3.2) |
+| Footer | M1.4 done: `Footer` in `MainLayout` on the secondary cream background. Logo + brand line, Wholesale CTA (`Button`), Quick Links, Categories, Contact (phone, email, address). One column with Quick Links / Categories accordions below 768px, two rows from 768px, four columns from 1024px. Content from `data/footer.js`; links and categories are derived from `data/navigation.js` |
 | Logo | `logo.webp` regenerated from `logo.png` with a transparent background |
 
-The old teal/Oswald/Jost styling has been removed. Still open in Phase 2: M2.1 route stubs (the nav links currently land on the 404 page), and the React Scroll anchors and back-to-top button from M2.4.
+The old teal/Oswald/Jost styling has been removed. Still open in Phase 2: M2.1 route stubs (the nav and footer links currently land on the 404 page), and the React Scroll anchors and back-to-top button from M2.4.
 
-Next milestone: **M1.4 Footer**, then **M2.1 Routes & stubs**.
+Next milestone: **M2.1 Routes & stubs**.
 
 ## Architecture Summary
 
@@ -269,17 +271,23 @@ State: React state + context only. No Redux unless a real need appears.
 - Scroll restoration on route change.
 
 **M2.2: Desktop navigation + mega menu**
+
+> Status: implemented early, alongside M1.3 (2026-10-06). See WORKLOG.md.
 - Nav order: Home · SHOP BY CATEGORIES · ABOUT US · WHOLESALE · CONTACT.
 - Mega menu: two-column layout with generous spacing listing Tea, Hing, Spice Powders and Dehydrated Powders. Each links to `/category/:slug`. Whether to list products under each category is flexible.
 - Opens on hover and keyboard focus/click. Closes on Esc, outside click and route change.
 - Categories come from `data/navigation.js` for now. They switch to the Category API in Phase 4.
 
 **M2.3: Mobile drawer**
+
+> Status: implemented early, alongside M1.3 (2026-10-06). See WORKLOG.md.
 - Hamburger animates to a close icon. The drawer slides in (DESIGN.md: Drawer = Slide).
 - SHOP BY CATEGORIES is an accordion inside the drawer.
 - Body scroll locked while open. Focus is trapped and returned to the trigger on close.
 
 **M2.4: Scroll behaviour**
+
+> Status: implemented early, alongside M1.3 (2026-10-06). See WORKLOG.md. Navbar part only: the React Scroll anchors and back-to-top button are still open, and the transparent state still needs checking over the real hero (M3.2).
 - Navbar is transparent at the top and turns solid beige with a soft shadow once scrolled. It is sticky throughout.
 - On pages without a hero, start solid **[DECIDE: Q13]**.
 - React Scroll for in-page anchors (e.g. the hero CTA scrolling to the categories section) and a back-to-top button.

@@ -1,5 +1,6 @@
 import { Outlet, ScrollRestoration, useMatches } from 'react-router'
 import AnnouncementBar from '@/components/AnnouncementBar'
+import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { announcement } from '@/data/navigation'
 
@@ -14,6 +15,7 @@ const MainLayout = () => {
       <main className="flex-1">
         <Outlet />
       </main>
+      <Footer />
       <ScrollRestoration />
     </div>
   )
