@@ -83,3 +83,5 @@ export const mainNavigation = [
   { id: 'wholesale', label: 'Wholesale', href: '/wholesale' },
   { id: 'contact', label: 'Contact', href: '/contact' },
 ]
+
+export const categories = mainNavigation.flatMap((item) => item.menu?.groups ?? [])

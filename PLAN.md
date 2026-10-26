@@ -36,7 +36,7 @@
 
 ## Current State (as of 2026-10-07)
 
-Phase 0 (M0.1–M0.3) and Phase 1 (M1.1–M1.4) are complete. In Phase 2, M2.2 (desktop navigation + mega menu), M2.3 (mobile drawer) and the navbar part of M2.4 (sticky, transparent → solid) were implemented early, in the same session as M1.3. M2.1 (route stubs) and the rest of M2.4 (React Scroll anchors, back-to-top) are still open.
+Phase 0 (M0.1–M0.3) and Phase 1 (M1.1–M1.4) are complete. In Phase 2, M2.2 (desktop navigation + mega menu), M2.3 (mobile drawer) and the navbar part of M2.4 (sticky, transparent → solid) were implemented early, in the same session as M1.3. M2.1 (routes and page stubs) is complete. The rest of M2.4 (React Scroll anchors, back-to-top) is still open.
 
 | Area | Status |
 |------|--------|
@@ -62,10 +62,11 @@ Phase 0 (M0.1–M0.3) and Phase 1 (M1.1–M1.4) are complete. In Phase 2, M2.2 (
 | Navigation behaviour | Implemented early (Phase 2 scope). M2.2: nav order Home · SHOP BY CATEGORIES · ABOUT US · WHOLESALE · CONTACT and the desktop mega menu. M2.3: mobile slide drawer with animated hamburger and category accordion. M2.4 (navbar part): sticky navbar, transparent over the Home hero and solid elsewhere (route `handle.transparentHeader`, `--header-height`). Not yet verified over a real hero image (M3.2) |
 | Footer | M1.4 done: `Footer` in `MainLayout` on the secondary cream background. Logo + brand line, Wholesale CTA (`Button`), Quick Links, Categories, Contact (phone, email, address). One column with Quick Links / Categories accordions below 768px, two rows from 768px, four columns from 1024px. Content from `data/footer.js`; links and categories are derived from `data/navigation.js` |
 | Logo | `logo.webp` regenerated from `logo.png` with a transparent background |
+| Routes | M2.1 done: `/`, `/category/:categoryName`, `/product/:productName`, `/about`, `/wholesale`, `/contact`, `*` (404). Stub pages use `Section` + `SectionHeading`. Category and product stubs take their title from `data/navigation.js` and show the 404 page for an unknown name |
 
-The old teal/Oswald/Jost styling has been removed. Still open in Phase 2: M2.1 route stubs (the nav and footer links currently land on the 404 page), and the React Scroll anchors and back-to-top button from M2.4.
+The old teal/Oswald/Jost styling has been removed. Still open in Phase 2: the React Scroll anchors and back-to-top button from M2.4.
 
-Next milestone: **M2.1 Routes & stubs**.
+Next milestone: **M2.4 remainder** (React Scroll anchors, back-to-top), then **Phase 3 Home Page**.
 
 ## Architecture Summary
 
@@ -266,7 +267,7 @@ State: React state + context only. No Redux unless a real need appears.
 ### Milestones
 
 **M2.1: Routes & stubs**
-- Routes: `/`, `/category/:slug`, `/product/:slug`, `/about`, `/wholesale`, `/contact`, `*` (404).
+- Routes: `/`, `/category/:categoryName`, `/product/:productName`, `/about`, `/wholesale`, `/contact`, `*` (404). The route parameters are named for what they hold (owner decision, 2026-10-07); the value is still the URL slug, e.g. `/category/dehydrated-powders`, `/product/premium-amchur-powder`.
 - Each stub page uses `MainLayout` and a `SectionHeading` placeholder.
 - Scroll restoration on route change.
 
@@ -274,7 +275,7 @@ State: React state + context only. No Redux unless a real need appears.
 
 > Status: implemented early, alongside M1.3 (2026-10-06). See WORKLOG.md.
 - Nav order: Home · SHOP BY CATEGORIES · ABOUT US · WHOLESALE · CONTACT.
-- Mega menu: two-column layout with generous spacing listing Tea, Hing, Spice Powders and Dehydrated Powders. Each links to `/category/:slug`. Whether to list products under each category is flexible.
+- Mega menu: two-column layout with generous spacing listing Tea, Hing, Spice Powders and Dehydrated Powders. Each links to `/category/:categoryName`. Whether to list products under each category is flexible.
 - Opens on hover and keyboard focus/click. Closes on Esc, outside click and route change.
 - Categories come from `data/navigation.js` for now. They switch to the Category API in Phase 4.
 
@@ -456,9 +457,9 @@ Optional additions **[DECIDE: Q8]**: `description`, `order` (menu order).
 
 **M4.2: Product model + API**: model with variant validation, `GET /api/products` (`?category=<slug>`, `?featured=true`), `GET /api/products/:slug` (active only, category populated). Seed products.
 
-**M4.3: Category listing page** (`/category/:slug`): category header + product grid. 404 state for an unknown slug. Empty state when a category has no products. Category switcher/links between categories (chips or tabs, like the reference "Shop by" tabs).
+**M4.3: Category listing page** (`/category/:categoryName`): category header + product grid. 404 state for an unknown slug. Empty state when a category has no products. Category switcher/links between categories (chips or tabs, like the reference "Shop by" tabs).
 
-**M4.4: Product details page** (`/product/:slug`)
+**M4.4: Product details page** (`/product/:productName`)
 - Image gallery (main image + thumbnails, swipe on mobile, zoom on hover per DESIGN.md "Images: Zoom").
 - Name, category breadcrumb, weight selector, price for the selected weight, stock status ("Out of stock" when 0).
 - Description (and structured sections if Q7 is approved).

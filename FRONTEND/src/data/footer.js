@@ -1,9 +1,7 @@
-import { mainNavigation } from '@/data/navigation'
+import { categories, mainNavigation } from '@/data/navigation'
 
 const pageLinks = mainNavigation.filter((item) => !item.menu)
-const categoryLinks = mainNavigation
-  .flatMap((item) => item.menu?.groups ?? [])
-  .map(({ id, title, href }) => ({ id, label: title, href }))
+const categoryLinks = categories.map(({ id, title, href }) => ({ id, label: title, href }))
 
 // Same fields as the planned SiteSettings model ({ phone, email, address }).
 // Details are the ones printed on the packaging.

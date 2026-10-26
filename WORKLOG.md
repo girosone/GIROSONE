@@ -59,7 +59,7 @@ Status: Completed (2026-10-05). Not committed yet.
 Status: Completed. M1.1 (2026-10-05), M1.2 and M1.3 (2026-10-06), M1.4 Footer (2026-10-07). M1.4 not committed yet.
 
 ### Phase 2 — Navigation / Routing
-Status: In progress. M2.2, M2.3 and the navbar part of M2.4 were implemented early, in the M1.3 session (2026-10-06). M2.1 (route stubs) and the React Scroll anchors / back-to-top part of M2.4 pending.
+Status: In progress. M2.2, M2.3 and the navbar part of M2.4 were implemented early, in the M1.3 session (2026-10-06). M2.1 (routes and page stubs) completed (2026-10-07), not committed yet. The React Scroll anchors / back-to-top part of M2.4 pending.
 
 ### Phase 3 — Home Page
 Status: Pending
@@ -95,7 +95,7 @@ Status: Pending
 - Folder structure matches PROJECT.md.
 - DESIGN.md tokens, self-hosted Playfair Display + Poppins and the 720 / 1140 / 1280 container are live in `index.css`. The old teal/Oswald/Jost theme is gone.
 - Shared UI layer exists in `components/` (Button, Container, Section, SectionHeading, Loader, EmptyState, ErrorMessage, Modal, FormField, WeightSelector, ProductCard, CategoryCard). Dev-only preview at `/dev/components`.
-- Site shell is announcement bar → sticky navbar → page → footer. The navbar is transparent over Home (route `handle: { transparentHeader: true }`) and solid elsewhere. Desktop mega menu and mobile drawer are complete. Only `/` and the 404 page exist as routes.
+- Site shell is announcement bar → sticky navbar → page → footer. The navbar is transparent over Home (route `handle: { transparentHeader: true }`) and solid elsewhere. Desktop mega menu and mobile drawer are complete. Routes: `/`, `/category/:categoryName`, `/product/:productName`, `/about`, `/wholesale`, `/contact` and the 404 page. All pages except Home and 404 are stubs.
 
 ## Session Log
 ### Planning
@@ -328,6 +328,37 @@ Issues / notes:
 - Not tested in Firefox or Safari.
 - Still open: focus-ring contrast on olive surfaces, the default Vite favicon.
 
+### M2.1 — Routes & page stubs (2026-10-07)
+Status: Completed.
+
+Changed:
+- `App.jsx`: added `category/:categoryName`, `product/:productName`, `about`, `wholesale` and `contact` under the existing `MainLayout` route. `/` and `*` (404) are unchanged.
+- New stub pages in `pages/`: `AboutPage`, `WholesalePage`, `ContactPage`, `CategoryPage`, `ProductPage`. Each is a `Section` with a `SectionHeading` rendered as the page `h1` plus one placeholder line.
+- `CategoryPage` and `ProductPage` read `categoryName` / `productName` with `useParams` and take the title from `data/navigation.js`. A name that is not in that data renders the existing `NotFoundPage`.
+- `data/navigation.js`: new `categories` export (the mega menu groups). `data/footer.js` now uses it.
+- Route parameters are named `:categoryName` and `:productName` instead of `:slug` at the owner's request. PLAN.md M2.1, M2.2, M4.3 and M4.4 were updated to match. Backend API paths in PLAN.md still say `:slug`.
+- Scroll restoration was already in `MainLayout` (`ScrollRestoration`).
+- No packages added. Navbar, mega menu, drawer and footer components untouched.
+
+Verified:
+- `npm run lint` and `npm run build` pass with no warnings.
+- Chrome (playwright-core, dev server), 554 checks at 320 / 768 / 1024 / 1280, all passed, no console errors or warnings:
+  - Direct load of all 15 URLs (`/`, `/about`, `/wholesale`, `/contact`, 4 categories, 7 products): one `h1` with the expected title, Playfair Display, announcement bar + navbar + footer present, no horizontal scroll, content starts below the solid navbar. Home still has the transparent navbar.
+  - 404 page for `/nope`, `/shop`, `/category`, `/product`, `/category/unknown`, `/product/unknown`, `/about/extra`.
+  - Every internal link found in the header (navbar, mega menu, drawer) and footer (15 distinct hrefs) resolves to a real page.
+  - Desktop: navbar links navigate and get `aria-current="page"`; mega menu category and product links navigate and the menu closes.
+  - Mobile / tablet: drawer page, category and product links navigate and the drawer closes.
+  - Footer category link and CTA navigate and the new page starts at the top; browser back / forward work; category to category changes without a page reload.
+
+Issues / notes:
+- Not committed.
+- The stub copy ("... will be available here soon.") is placeholder text. About, Wholesale and Contact are built in Phase 5; Category and Product in Phase 4.
+- Category and product titles come from the navigation data until the API replaces it in Phase 4. The unknown-name 404 is a client-side lookup, so the server still answers 200 for those URLs.
+- No per-page document title yet (basic SEO meta is a Phase 10 optional item).
+- A deep link refresh works on the Vite dev server. The production host needs the SPA fallback from M10.4.
+- Not tested in Firefox or Safari.
+- Still open in Phase 2: M2.4 React Scroll anchors and back-to-top button; transparent navbar check over the real hero (M3.2).
+
 ## Update Rules
 After each Claude milestone:
 1. Update that milestone's status.
@@ -338,4 +369,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M2.1 — Routes & stubs (Phase 2). Commit M1.4 first.
+M2.4 remainder — React Scroll anchors and back-to-top button (Phase 2), then Phase 3 — Home Page (M3.1). Commit M2.1 first.
