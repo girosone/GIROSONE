@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import ScrollLink from '@/components/ScrollLink'
 import { cn } from '@/utils/cn'
 
 const variants = {
@@ -12,7 +13,8 @@ const sizes = {
   lg: 'min-h-14 px-9 text-lg',
 }
 
-// Renders a router link with `to`, an anchor with `href`, otherwise a button.
+// Renders a router link with `to` (a `#section-id` scrolls within the page),
+// an anchor with `href`, otherwise a button.
 const Button = ({
   variant = 'primary',
   size = 'md',
@@ -31,6 +33,14 @@ const Button = ({
     fullWidth && 'w-full',
     className,
   )
+
+  if (typeof to === 'string' && to.startsWith('#')) {
+    return (
+      <ScrollLink to={to} className={classes} {...props}>
+        {children}
+      </ScrollLink>
+    )
+  }
 
   if (to) {
     return (

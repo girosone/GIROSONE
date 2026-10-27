@@ -1,5 +1,6 @@
 import { Outlet, ScrollRestoration, useMatches } from 'react-router'
 import AnnouncementBar from '@/components/AnnouncementBar'
+import BackToTop from '@/components/BackToTop'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { announcement } from '@/data/navigation'
@@ -16,6 +17,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <BackToTop />
       <ScrollRestoration />
     </div>
   )

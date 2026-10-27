@@ -34,9 +34,9 @@
 
 ---
 
-## Current State (as of 2026-10-07)
+## Current State (as of 2026-10-27)
 
-Phase 0 (M0.1–M0.3) and Phase 1 (M1.1–M1.4) are complete. In Phase 2, M2.2 (desktop navigation + mega menu), M2.3 (mobile drawer) and the navbar part of M2.4 (sticky, transparent → solid) were implemented early, in the same session as M1.3. M2.1 (routes and page stubs) is complete. The rest of M2.4 (React Scroll anchors, back-to-top) is still open.
+Phase 0 (M0.1–M0.3), Phase 1 (M1.1–M1.4) and Phase 2 (M2.1–M2.4) are complete. In Phase 2, M2.2 (desktop navigation + mega menu), M2.3 (mobile drawer) and the navbar part of M2.4 (sticky, transparent → solid) were implemented early, in the same session as M1.3. M2.1 (routes and page stubs) and the rest of M2.4 (React Scroll anchors, back-to-top) followed.
 
 | Area | Status |
 |------|--------|
@@ -63,10 +63,11 @@ Phase 0 (M0.1–M0.3) and Phase 1 (M1.1–M1.4) are complete. In Phase 2, M2.2 (
 | Footer | M1.4 done: `Footer` in `MainLayout` on the secondary cream background. Logo + brand line, Wholesale CTA (`Button`), Quick Links, Categories, Contact (phone, email, address). One column with Quick Links / Categories accordions below 768px, two rows from 768px, four columns from 1024px. Content from `data/footer.js`; links and categories are derived from `data/navigation.js` |
 | Logo | `logo.webp` regenerated from `logo.png` with a transparent background |
 | Routes | M2.1 done: `/`, `/category/:categoryName`, `/product/:productName`, `/about`, `/wholesale`, `/contact`, `*` (404). Stub pages use `Section` + `SectionHeading`. Category and product stubs take their title from `data/navigation.js` and show the 404 page for an unknown name |
+| Scroll behaviour | M2.4 done: React Scroll via `utils/scroll.js` (navbar offset, reduced motion, focus moved to the target). In-page anchors with `ScrollLink` or `Button to="#section-id"`. `BackToTop` in `MainLayout`. `html` uses `scroll-padding-top: var(--header-height)` instead of CSS smooth scrolling, so route changes start at the top instantly |
 
-The old teal/Oswald/Jost styling has been removed. Still open in Phase 2: the React Scroll anchors and back-to-top button from M2.4.
+The old teal/Oswald/Jost styling has been removed. Still to check in M3.2: the transparent navbar over the real hero image.
 
-Next milestone: **M2.4 remainder** (React Scroll anchors, back-to-top), then **Phase 3 Home Page**.
+Next milestone: **Phase 3 Home Page**, starting with **M3.1** (Announcement).
 
 ## Architecture Summary
 
@@ -288,10 +289,11 @@ State: React state + context only. No Redux unless a real need appears.
 
 **M2.4: Scroll behaviour**
 
-> Status: implemented early, alongside M1.3 (2026-10-06). See WORKLOG.md. Navbar part only: the React Scroll anchors and back-to-top button are still open, and the transparent state still needs checking over the real hero (M3.2).
+> Status: completed. Navbar part implemented early, alongside M1.3 (2026-10-06); React Scroll anchors and back-to-top completed 2026-10-27. See WORKLOG.md. The transparent state still needs checking over the real hero (M3.2).
 - Navbar is transparent at the top and turns solid beige with a soft shadow once scrolled. It is sticky throughout.
 - On pages without a hero, start solid **[DECIDE: Q13]**.
 - React Scroll for in-page anchors (e.g. the hero CTA scrolling to the categories section) and a back-to-top button.
+- In-page anchors: give the target section an `id` and link to it with `Button to="#id"` or `ScrollLink`. The scroll stops below the sticky navbar.
 
 **Frontend tasks:** M2.1–M2.4.
 **Backend tasks:** None. **Database/model tasks:** None.

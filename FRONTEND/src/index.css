@@ -54,7 +54,10 @@
     background-color: var(--color-bg);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-    scroll-behavior: smooth;
+    /* Anchor targets and keyboard focus stop below the sticky navbar. Smooth
+       scrolling is done by React Scroll (utils/scroll.js), so route changes
+       start at the top instantly. */
+    scroll-padding-top: var(--header-height);
   }
 
   html:has(dialog:modal) {
@@ -107,11 +110,12 @@
     @apply outline-2 outline-offset-2 outline-gold;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    html {
-      scroll-behavior: auto;
-    }
+  /* Sections and the page focused by script after an in-page scroll. */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
 
+  @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {

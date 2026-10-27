@@ -42,7 +42,7 @@ Build a complete, fully functional GIROSONE Spices & Foods website based on the 
 
 ## Current Status
 ### M0.1 — Repository & Documentation
-Status: Completed (2026-10-04). First commit not yet made.
+Status: Completed (2026-10-04). Committed (`adae846`).
 
 Done:
 - `PROJECT.md`, `DESIGN.md`, `PLAN.md`, `PROMPT.md`, `WORKLOG.md` at root
@@ -50,16 +50,16 @@ Done:
 - Git initialized at project root (branch `main`)
 
 ### M0.2 — Frontend Realignment
-Status: Completed (2026-10-05). Not committed yet.
+Status: Completed (2026-10-05). Committed (`4bb19dc`).
 
 ### M0.3 — Backend Skeleton + MongoDB
-Status: Completed (2026-10-05). Not committed yet.
+Status: Completed (2026-10-05). Committed (`2012fe2`).
 
 ### Phase 1 — Design System / Shared UI
-Status: Completed. M1.1 (2026-10-05), M1.2 and M1.3 (2026-10-06), M1.4 Footer (2026-10-07). M1.4 not committed yet.
+Status: Completed. M1.1 (2026-10-05), M1.2 and M1.3 (2026-10-06), M1.4 Footer (2026-10-07). Committed (`2b12501`, `f5eb01a`, `e9b944b`, `110503f`).
 
 ### Phase 2 — Navigation / Routing
-Status: In progress. M2.2, M2.3 and the navbar part of M2.4 were implemented early, in the M1.3 session (2026-10-06). M2.1 (routes and page stubs) completed (2026-10-07), not committed yet. The React Scroll anchors / back-to-top part of M2.4 pending.
+Status: Completed (2026-10-27). M2.2, M2.3 and the navbar part of M2.4 were implemented early, in the M1.3 session (2026-10-06), committed in `e9b944b`. M2.1 (routes and page stubs) committed (`961d01f`). The rest of M2.4 (React Scroll anchors, back-to-top) completed 2026-10-27, not committed yet. The transparent navbar over the real hero is checked in M3.2.
 
 ### Phase 3 — Home Page
 Status: Pending
@@ -96,6 +96,7 @@ Status: Pending
 - DESIGN.md tokens, self-hosted Playfair Display + Poppins and the 720 / 1140 / 1280 container are live in `index.css`. The old teal/Oswald/Jost theme is gone.
 - Shared UI layer exists in `components/` (Button, Container, Section, SectionHeading, Loader, EmptyState, ErrorMessage, Modal, FormField, WeightSelector, ProductCard, CategoryCard). Dev-only preview at `/dev/components`.
 - Site shell is announcement bar → sticky navbar → page → footer. The navbar is transparent over Home (route `handle: { transparentHeader: true }`) and solid elsewhere. Desktop mega menu and mobile drawer are complete. Routes: `/`, `/category/:categoryName`, `/product/:productName`, `/about`, `/wholesale`, `/contact` and the 404 page. All pages except Home and 404 are stubs.
+- Scrolling: React Scroll through `utils/scroll.js` (navbar offset, instant with reduced motion, focus moved to the target). In-page anchors with `ScrollLink` or `Button to="#section-id"`. `BackToTop` is rendered by `MainLayout`. `html` has `scroll-padding-top: var(--header-height)` and no CSS smooth scrolling, so route changes start at the top instantly.
 
 ## Session Log
 ### Planning
@@ -359,6 +360,46 @@ Issues / notes:
 - Not tested in Firefox or Safari.
 - Still open in Phase 2: M2.4 React Scroll anchors and back-to-top button; transparent navbar check over the real hero (M3.2).
 
+### M2.4 — Scroll behaviour, remaining part (2026-10-27)
+Status: Completed. Phase 2 is complete with it.
+
+Changed:
+- New `utils/scroll.js`. It wraps React Scroll's `scroller.scrollTo` and `animateScroll.scrollToTop` with the project defaults: `easeInOutCubic` easing, 300–700ms depending on distance, instant (duration 0) under `prefers-reduced-motion`, and an offset equal to the navbar height (read from `scroll-padding-top`). After the scroll starts, focus moves to the target, so the next Tab continues from there. Non-interactive targets get a temporary `tabindex="-1"` that is removed on blur. `scrollToTop` moves focus to the start of the page.
+- React Scroll workaround: React Scroll attaches its cancel listener (wheel / touch / mousedown / keydown) only once, bound to the first animation's state, so only the first animation on a page could be interrupted. All calls now share one state object, so every animation stops on user input.
+- New `components/ScrollLink.jsx`: an `<a href="#id">` that smooth-scrolls to the element with that id. Ctrl / Cmd / Shift / Alt and non-primary clicks keep the browser default. If the id is not on the page, the browser default runs.
+- `Button`: a `to` that starts with `#` renders a `ScrollLink`, so a hero CTA `buttonLink` can be either a route or an in-page anchor. The other `to` / `href` / button cases are unchanged.
+- New `components/BackToTop.jsx`: `IconButton` with `FiArrowUp` and the label "Back to top". 48px golden-brown circle, white icon, soft shadow, hover lift, press scale. Fixed bottom-right: 16px from the edges below 1024px (more if the device has a safe-area inset), 32px from 1024px. Appears after 600px of scroll (`useScrolled`). When hidden it uses `visibility: hidden`, so it leaves the tab order and the accessibility tree. z-30: under the navbar (z-40) and the dialogs. Rendered once in `MainLayout`, after the footer.
+- `index.css`: `html { scroll-behavior: smooth }` replaced by `scroll-padding-top: var(--header-height)`. The CSS smooth scrolling double-animated React Scroll's per-frame `window.scrollTo` calls, and it made every route change animate up from the old scroll position. Anchor targets, hash links and focus scrolling now stop below the sticky navbar. The reduced-motion `scroll-behavior: auto` override was removed with it. Added `[tabindex="-1"]:focus { outline: none }` so a section or the page focused by script gets no ring.
+- `Footer`: below 640px the copyright bar now has 72px bottom padding (plus any safe-area inset), so the back-to-top button does not cover the wrapped line at the bottom of the page. From 640px it is 24px, as before.
+- `ComponentShowcase` (dev only): "Jump to section" links (`Button to="#…"`) and ids on its sections, for testing the anchors.
+- No packages added: `react-scroll` 1.9.3 was already installed. It has no `findDOMNode` and uses `defaultProps` only on class components, so it is fine on React 19. `Header`, `Navbar`, `MegaMenu` and `MobileMenu` are untouched.
+
+Verified:
+- `npm run lint` and `npm run build` pass with no warnings.
+- Chrome (playwright-core, dev server), 217 checks at 320 / 360 / 414 / 639 / 640 / 768 / 1024 / 1280 / 1440, all passed, no console errors or warnings:
+  - Back to top: hidden at the top and at 400px, visible after 600px. 48×48, 16px / 32px from the edges, golden brown with a white icon, round. A click scrolls to 0 smoothly in about 670–680ms (3,300–5,900px), with no backward jumps. Hidden again at the top. Focus is on `<body>` and the next Tab lands on the first navbar control (hamburger below 1024px, logo from 1024px). The temporary tabindex is removed.
+  - Keyboard: Tab from the last footer link reaches the button, which shows the golden-brown focus ring. Enter and Space both scroll to the top.
+  - In-page anchors: the jump link is an `<a href="#…">`. The scroll animates and the section stops right under the navbar (64px / 128px), with the navbar still stuck. The URL does not change. Focus is on the section, with no ring, and the next Tab goes to the first field inside it.
+  - Reduced motion: back to top and anchors are instant, with no intermediate frames. The button appears without a transition.
+  - A wheel event stops the 1st, 2nd and 3rd animation. Control run with plain React Scroll calls: the 2nd animation ignores the wheel and runs to 0.
+  - Ctrl+click on a jump link is left to the browser.
+  - `el.scrollIntoView()`, which `ScrollRestoration` uses for hash URLs, stops below the navbar.
+  - Back-to-top covers no footer text or control at the bottom of the page at any tested width.
+  - Regression: navbar is transparent at the top of Home, solid and stuck after scroll, and solid on `/about`. A route change (footer CTA) starts at the top with no animation; back restores the previous scroll position; forward works. Mega menu opens on hover, click and Enter, closes on mouse leave and on Esc (focus back on the trigger), and a link navigates and closes it. Navbar links get `aria-current`. The drawer opens as a modal over the back-to-top button, closes on Esc (focus back on the trigger), and a link navigates and closes it. The 404 page renders.
+
+Issues / notes:
+- Not committed.
+- The current stub pages rarely show the button: at 360×720 they scroll at most about 470px (Home about 640px), under the 600px threshold. It shows on `/dev/components` and will show on the Phase 3+ pages.
+- No live page has an in-page anchor yet. The first planned one is the Home hero CTA to the categories section (M3.2 / M3.3): give the section an `id` and use `Button to="#id"`.
+- Same-page links (logo or Home on `/`, a footer link to the current page) now jump to the top instantly instead of using the old CSS smooth scroll. They are route navigations handled by `ScrollRestoration`, like every other route change.
+- In-page anchors do not add the hash to the URL (the React Scroll default). Hash URLs still work on direct load and on navigation through `ScrollRestoration`, but only if the target is in the first render: on a lazy-loaded page (the dev showcase) the hash is ignored on first load. Phase 3 sections that fetch data should render their `id` wrapper right away.
+- Cross-page anchors (`to="/#categories"`) go through the router and jump instantly. Only same-page `#id` links animate.
+- The cancel workaround relies on React Scroll's undocumented `data` option. If a later version changes it, animations still work but may not stop on user input.
+- Found while testing, not changed (M2.2): when the mega menu is opened by hover only, Esc does not close it, because its key handler needs focus inside the menu. It does close on mouse leave and outside click. WCAG 1.4.13 expects content shown on hover to be dismissable without moving the pointer; a document-level Esc listener would cover it.
+- Not tested in Firefox or Safari.
+- The product photos added to `src/assets/images` and the deleted `.gitkeep` there are not part of this milestone.
+- Still open: transparent navbar over the real hero (M3.2), focus-ring contrast on olive surfaces, the default Vite favicon.
+
 ## Update Rules
 After each Claude milestone:
 1. Update that milestone's status.
@@ -369,4 +410,4 @@ After each Claude milestone:
 6. Never mark a milestone complete based only on intention.
 
 ## Next Milestone
-M2.4 remainder — React Scroll anchors and back-to-top button (Phase 2), then Phase 3 — Home Page (M3.1). Commit M2.1 first.
+Phase 3 — Home Page, starting with M3.1 (Announcement, backend + frontend). Commit M2.4 first.

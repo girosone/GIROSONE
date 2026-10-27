@@ -128,7 +128,8 @@ const Footer = () => {
       </Container>
 
       <div className="border-t border-ink/10">
-        <Container className="py-6 text-center text-xs text-ink/80 sm:text-sm">
+        {/* Below 640px the line wraps under the back-to-top button, so keep it clear. */}
+        <Container className="pt-6 pb-[calc(max(1rem,env(safe-area-inset-bottom))+3.5rem)] text-center text-xs text-ink/80 sm:py-6 sm:text-sm">
           © {new Date().getFullYear()} {legalName}. All rights reserved.
         </Container>
       </div>

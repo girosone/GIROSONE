@@ -53,6 +53,14 @@ const sampleProducts = [
   },
 ]
 
+// In-page anchors (Button with a `#id`), scrolled by React Scroll.
+const jumpLinks = [
+  { id: 'showcase-categories', label: 'Categories' },
+  { id: 'showcase-products', label: 'Products' },
+  { id: 'showcase-forms', label: 'Form fields' },
+  { id: 'showcase-states', label: 'States' },
+]
+
 const ComponentShowcase = () => {
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -79,9 +87,17 @@ const ComponentShowcase = () => {
         <Button fullWidth className="mt-4 sm:hidden">
           Full width on mobile
         </Button>
+
+        <nav aria-label="Jump to section" className="mt-8 flex flex-wrap gap-3">
+          {jumpLinks.map((link) => (
+            <Button key={link.id} variant="secondary" size="sm" to={`#${link.id}`}>
+              {link.label}
+            </Button>
+          ))}
+        </nav>
       </Section>
 
-      <Section tone="alt">
+      <Section id="showcase-categories" tone="alt">
         <SectionHeading title="Shop by Category" subtitle="CategoryCard, with and without an image." />
         <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-4 lg:gap-8">
           {sampleCategories.map((category) => (
@@ -90,7 +106,7 @@ const ComponentShowcase = () => {
         </div>
       </Section>
 
-      <Section>
+      <Section id="showcase-products">
         <SectionHeading title="Featured Products" align="left" />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {sampleProducts.map((product) => (
@@ -99,7 +115,7 @@ const ComponentShowcase = () => {
         </div>
       </Section>
 
-      <Section tone="alt">
+      <Section id="showcase-forms" tone="alt">
         <SectionHeading title="Form Fields" />
         <form
           noValidate
@@ -139,7 +155,7 @@ const ComponentShowcase = () => {
         </form>
       </Section>
 
-      <Section>
+      <Section id="showcase-states">
         <SectionHeading title="States" divider={false} />
         <div className="grid gap-8 md:grid-cols-3">
           <Loader showLabel />
